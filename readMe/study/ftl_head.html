@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div style="margin:10px; line-height:18px;  font-size:12px;">
+ 
+ <span class="tl">文档头部定义标签:&lt;ftl_head&gt;&lt;/ftl_head&gt; </span><br />
+  定义一个模板的结构,非必要标签，该标签一般放在模板的最前面，
+  标签内容是一个json串,包含在&lt;ftl_head&gt;{}&lt;/ftl_head&gt;中,表示一个json对象.<br />
+  ftl_head内的json格式比较简单，一个属性即代表一个树节点，树的节点都是复选框节点，简单写法如下。<br />
+  比如:<br />
+  
+  &nbsp;&nbsp;&nbsp; <textarea cols="100" rows="15">
+ <ftl_head>
+{
+    'node_name':'说明',
+    'node1':'节点1',
+    'node2':
+    {
+        'node2_1':'节点2_1',
+        'node2_2':'节点2_2',
+        'node2_3':'节点2_3'
+    },
+    'node3':
+	{
+        'node3_1':'节点3_1',
+        'node3_2':'节点3_2',
+        'node3_3':'节点3_3',
+		'node3_4':'节点3_4',
+		'node3_5':'节点3_5'
+	} 
+}
+</ftl_head>
+<#list checkedList as e>
+选中接点${e}
+</#list>
+</textarea><br /><br />
+ 
+ <img src="images/ftl_head0.png" />
+ <br /><br />
+ 
+ 复选框规律，选中一个复选框，会自动选中其父节点，在有些情况下，生成代码逻辑需要多选一(比如页面展现你要么是支撑分页效果展现，要么非分页效果展现)，按如下设置，可以让复选框更灵活。
+  <br />
+  1、key命名规则:<br />
+  &nbsp;&nbsp;&nbsp;(r)表示单选框(可理解为radio),如下模板中"节点2_1,节点2_2,节点2_3"有相同的后缀，是一组单选框.<br />
+  &nbsp;&nbsp;&nbsp;(c)表示多选框(可理解为checkbox),如下模板中"节点3_1,节点3_2,节点3_3"有相同的后缀，是一组复选框<br />
+  <br />
+
+  2、复选框节点联带选择，即选中一个复选节点，连带选中某些相关的节点。<br />
+   &nbsp;&nbsp;&nbsp;联动规律：<br />
+   &nbsp;&nbsp;&nbsp;选中"节点3_1,节点3_2,节点3_3"中任意一个节点，都会自动选中"节点3_4,节点3_5",<br />
+   &nbsp;&nbsp;&nbsp;选中"节点3_4"会自动选中"节点3_5",<br />
+   &nbsp;&nbsp;&nbsp;即b(c)联动"_b(c),_b(c)联动__b(c),.....
+  <br />
+&nbsp;&nbsp;&nbsp; <textarea cols="100" rows="15">
+ <ftl_head>
+{
+    'node_name':'说明',
+    'node1':'节点1',
+    'node2':
+    {
+        'node_name':'重命名node2',
+        'node2_1/a(r)':'节点2_1',
+        'node2_2/a(r)':'节点2_2',
+        'node2_3/a(r)':'节点2_3'
+    },
+    'node3':
+	{
+        'node3_1/b(c)':'节点3_1',
+        'node3_2/b(c)':'节点3_2',
+        'node3_3/b(c)':'节点3_3',
+		'node3_4/__b(c)':'节点3_4',
+		'node3_5/___b(c)':'节点3_5'
+	} 
+}
+</ftl_head>
+<#list checkedList as e>
+选中接点${e}
+</#list>
+ 
+</textarea><br /><br />
+3、将上内容保存到模板,选种任一java文件,右键->Easy Code 即弹出预览框可查看效果。<br /><br />
+&nbsp;&nbsp;&nbsp;<img src="images/head.png" />
+ 
+
+</div>
+
+</body>
+</html>

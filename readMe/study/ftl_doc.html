@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div style="margin:10px; line-height:18px;  font-size:12px;">
+<span class="tl">文档标签.</span>
+<br />
+ 
+ 文档标签&lt;ftl_doc&gt;&lt;/ftl_doc&gt; <br />
+ 该标签一般描述模板的使用说明,比如对模板中方法的介绍,使用等等。<br />
+ 包含在文档标签里面的内容不会在预览框或文件中生成。<br />
+ <textarea cols="100" rows="15">
+<ftl_head>
+{
+    'node1':'1',
+    'node2':'2',
+    'node3':'3'
+}
+</ftl_head>
+<#if checkedList?seq_contains("node1")>
+1<ftl_doc> 节点一</ftl_doc>
+</#if>
+<#if checkedList?seq_contains("node2")>
+2<ftl_doc> 节点2</ftl_doc>
+</#if>
+<#if checkedList?seq_contains("node3")>
+3 <ftl_doc> 节点3</ftl_doc>
+</#if>
+</textarea><br />
+<br />
+选中节点2，效果如下：<br /><br />
+<img src="images/ftl_doc.png" /><br />
+
+</div>
+
+</body>
+</html>

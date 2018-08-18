@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div style="margin:10px;font-size:12px;  line-height:20px;">
+<p> 
+  
+  <span class="tl">1.通过注释方式来定义元数据模型.</span><br />
+  通过对对象属性添加注释,表达一定的业务意义,
+  默认注释配置:<br />
+  eg:
+  isPk="Y"/id,lineId;表示名称为id,lineId的属性会默认添加了该注释.
+  <br />
+
+  注释是否生效,可以在预设参数中体现出来,见下图.
+  <br />可以将这些注释显性的显示出来,用代码生成编辑器编辑器打开该java文件,然后在CodeGen标签页选中一个模板,再到主标签页用鼠标选中要添加注释的代码,然后点击编码工具->添加属性注释即可.
+   <br />
+  <img src="images/anno.JPG" /> 
+  <br /><br />
+  <span class="tl">2.修改默认注释</span><br />
+  有时候对象的属性设置上可能不是按照注释来设置,可以通过如下方式修改.
+  <br />
+  <img src="images/changeAnno.JPG" /><br />  
+   <span class="tl">3.注释说明</span><br />
+   属性注释用: 注释/属性名; 以分号结尾.<br />
+   类注释:    注释; 以分号结尾<br />
+   
+   
+  注释支持freemarker语法,eg:<br />
+  <textarea cols="50", rows="5">
+  <#list sys.propList as e>
+     <#if e.propType.clzName=='String'>
+	 query="Y"/${e.propName}; 
+	 </#if>
+  </#list>
+  </textarea><br />
+  注释也支持正则表达式:<br />
+    <textarea cols="50", rows="5">
+  title="主键"/id;
+  query="Y",insert='Y'/i.*;<#--表示以i开头的所有属性-->
+  author="admin";<#--类注释-->
+  </textarea><br />
+  </p>
+</div>
+</body>
+</html>
