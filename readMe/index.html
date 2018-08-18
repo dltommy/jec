@@ -60,6 +60,26 @@ function openwin(page)
 4、<a href="javascript:openwin('ftl_append.html');">文档修改标签</a><br />
 
 
+5、新增freemarker方法(V1.2上版本)。<br/>
+  <ul>
+  <li>filtMatch ：过滤出满足条件的节点，支持正则匹配。 
+  <pre>例：遍历所有满足属性名为id,或name的所有属性节点。
+ &lt;#list filtMatch(sys.propList,"{\"propName\":\"id\"}","{\"propName\":\"name\"}") as e&gt;
+  ${e.propName}
+ &lt;/#list&gt;
+例：遍历javaAnList值中含有Mapping关键字的节点。 
+ &lt;#list filtMatch(sys.propList,"{\"javaAnList\":\".*Mapping.*\"}") as e>  
+   Match: ${e.propName}
+ &lt;/#list&gt;</pre>
+   </li>
+   <li>filtNotMatch方法，过滤出不满足条件的节点，支持正则匹配。
+    <pre>例： 遍历所有满足属性名不为id 并且 也不为name的所有属性节点。
+ &lt;#list filtNotMatch(sys.propList,"{\"propName\":\"id\"}","{\"propName\":\"name\"}") as e&gt;
+   prop notMatch: ${e.propName}
+ &lt;/#list&gt;
+ </pre>
+   </li>
+ </ul>
 </div>
  
 
@@ -78,7 +98,8 @@ function openwin(page)
 4、用户自定义参数，在界面上有体现，也是一个json对象，建议模板的易变部分通过用户参数控制。<br />
 &nbsp;&nbsp;<a href="javascript:openwin('user_param.html');">查看明细</a><br />
 
- 
+  
+
 </div>
 
 
