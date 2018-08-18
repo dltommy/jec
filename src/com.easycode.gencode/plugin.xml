@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+ 
+ <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Easy Code"
+            visible="true"
+            id="HelloWorld.actionSet">
+      
+         <action
+               definitionId="client.action.ReviewActionBind"
+               label="Easy Code"
+               icon="icons/sample.png"
+               class="com.easycode.gencode.action.ReviewAction"
+               tooltip=""
+              
+               toolbarPath="sampleGroup"
+               id="client.action.ReviewAction">
+         </action>
+       
+         
+         
+      </actionSet>
+   </extension>
+   
+
+
+
+
+
+
+      <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            default="false"
+            name="Easy Code"
+            extensions="java"
+            icon="icons/sample.png"
+            contributorClass="com.easycode.gencode.javaeditor.GenJavaCodeEditorContributor"
+            class="com.easycode.gencode.javaeditor.GenJavaCodeEditor"
+            id="client.editors.gencode.cfg.GenJavaCodeEditor">
+      </editor>
+   </extension>
+ <extension point="org.eclipse.ui.commands">  
+   <command  
+         description="multlanguage"  
+         id="client.action.ReviewActionBind"  
+         name="Add Mutilang">  
+   </command>  
+</extension>  
+    
+         <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Easy Code 配置"
+            extensions="xml"
+            nameFilter="GenInitConfig.xml"
+            icon="icons/sample.png"
+          
+            contributorClass="com.easycode.configmgr.configeditor.ConfigCodeEditorContributor"
+            class="com.easycode.configmgr.configeditor.ConfigCodeEditor"
+            id="client.editors.gencode.cfg.ConfigEditor">
+      </editor>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            default="false"
+            name="多语言词条提取"
+            extensions="jsp,htm,html,vue,xml,txt,text"
+            icon="icons/sample.png"
+            contributorClass="com.easycode.jspeditor.editor.JSPMultiPageEditorContributor"
+            class="com.easycode.jspeditor.editor.JSPMultiPageEditor"
+            id="client.editors.gencode.jsp.JSPMultiPageEditor">
+      </editor>
+   </extension>
+  
+  
+  <extension point="org.eclipse.ui.bindings">  
+     <key  
+           commandId="client.editors.gencode.jsp.mulkj"  
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"  
+           sequence="Alt+Q">  
+      </key>  
+  </extension>  
+  
+  <extension point="org.eclipse.ui.commands">  
+   <command  
+         description="multlanguage"  
+         id="client.editors.gencode.jsp.mulkj"  
+         name="Add Mutilang">  
+   </command>  
+</extension>  
+  
+  
+ <extension point="org.eclipse.ui.actionSets">  
+      <actionSet  
+            id="client.editors.gencode.jsp.mulkjid"  
+            label="myActionSet"  
+            visible="false">  
+         <action  
+               definitionId="client.editors.gencode.jsp.mulkj"  
+               id="client.editors.gencode.jsp.id"  
+               label="open"  
+               retarget="true">  
+         </action> 
+      </actionSet>  
+   </extension>  
+  
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="java.lang.Object"
+            nameFilter="*.java"
+            id="PopMenu.contribution1">
+       <action
+               label="Easy Code"
+               class="com.easycode.gencode.action.PopReviewAction"
+               menubarPath="group1"
+              enablesFor="1"
+               icon="icons/sample.png"
+               id="PopMenu.newAction">
+       </action>
+         
+         
+         
+         
+         
+         
+       </objectContribution>
+   </extension>
+   
+
+</plugin>
