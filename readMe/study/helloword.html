@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>无标题文档</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div style="margin:10px;">
+<span class="tl">1.创建两个java文件Hellow.java, World.java,见下:</span> 
+<br /><img src="images/newhw.JPG"/>
+<br />
+<br /><span class="tl">2.选中一个java文件,右键->打开方式->代码生成:</span>
+<br /><img src="images/beginHw.JPG"/>
+<br />
+<br /><span class="tl">3.用代码生成编辑器打开该java文件后,如下图创建一个HelloWorld模板,最后点击 "保存到本地".</span>
+<br />
+模板内容<br />
+<textarea rows="3" cols="50">
+<ftl_file path="hello/world.txt">
+<#list sys.propList as e>
+${e_index+1}: ${e.propName}
+</#list>
+</ftl_file>
+</textarea>
+<br /><img src="images/createHw.JPG"/>
+<br />
+
+
+<br /><span class="tl">4.选中Hello.java文件,右键->预览代码</span>
+<br /><img src="images/genHw.JPG"/>
+<br />
+<br /><span class="tl">5.操作介绍</span>
+<br /><img src="images/totalView.JPG"/>
+ 
+</div>
+</body>
+</html>

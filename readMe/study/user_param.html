@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div style="margin:10px;font-size:12px;">
+  <span class="tl">自定义参数:</span><br />
+ 自定义参数设置见下图，用户参数也是个标准的json串，在模板中访问自定义参数需要加上前缀user.<br />
+ 例:<br />如下是个依照用户参数值来设定文件生成的路径:<br />
+参数设置:<br />
+ <textarea cols="50" rows="5">
+{
+    test1:'test/test1.txt',
+    test2:'test/test2.txt'
+}
+ </textarea>
+ <br />
+ 模板内容如下:<br />
+ 
+  <textarea cols="50" rows="5">
+ <ftl_file path="${user.test1}">文件1</ftl_file>
+<ftl_file path="${user.test2}">文件2</ftl_file>
+ </textarea>
+ <br />
+ <img src="images/user_param1.png" />
+ <img src="images/user_param2.png" />
+ <br /><br />
+ 勾上左下边复选框，查看预览效果见下<br />
+  <img src="images/user_param3.png" />
+</div>
+</body>
+</html>

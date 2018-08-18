@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div style="margin:10px; line-height:18px;  font-size:12px;">
+<span class="tl">模板采用freemarker语法编写,除freemarker语法之外,另提供如下几种标签.</span>
+<br />
+<ul style="line-height:20px;">
+<li><strong>文档头部定义标签:&lt;ftl_head&gt;&lt;/ftl_head&gt; </strong><br />
+  定义一个模板的结构,非必要标签.
+  标签内容是一个json串,包含在{}中,表示一个json对象.如下:
+  key命名规则,(r)表示单选框(可理解为radio),(c)表示多选框(可理解为checkbox).<br />
+  如下:<br />"节点2_1,节点2_2,节点2_3"有相同的后缀，是一组单选框.<br />
+  ,"节点3_1,节点3_2,节点3_3"有相同的后缀，是一组复选框.<br />
+   节点3_4,节点3_5是两个联动的选择框.<br />
+   联动规律：<br />选中"节点3_1,节点3_2,节点3_3"中任意一个节点，都会自动选中"节点3_4,节点3_5",
+   选中"节点3_4"会自动选中"节点3_5",<br />即b(c)联动"_b(c),__b(c).....，同理,_b(c)联动__b(c),___b(c)......
+  <br />
+ <textarea cols="100" rows="10">
+ <ftl_head>
+{
+    'node_name':'说明',
+    'node1':'节点1',
+    'node2':
+    {
+        'node_name':'重命名node2',
+        'node2_1/a(r)':'节点2_1',
+        'node2_2/a(r)':'节点2_2',
+        'node2_3/a(r)':'节点2_3'
+    },
+    'node3':
+	{
+        'node3_1/b(c)':'节点3_1',
+        'node3_2/b(c)':'节点3_2',
+        'node3_3/b(c)':'节点3_3',
+		'node3_4/__b(c)':'节点3_4',
+		'node3_5/___b(c)':'节点3_5'
+	} 
+}
+</ftl_head>
+<#list checkedList as e>
+选中接点${e}
+</#list>
+ 
+</textarea><br />
+将上内容保存到模板,选种任一java文件,右键->预览代码<br />
+<img src="images/studHead.JPG" />
+</li>
+<li><strong>文档标签&lt;ftl_doc&gt;&lt;/ftl_doc&gt;</strong><br />
+    模板的使用说明,比如对模板中方法的介绍,使用等等.
+</li>
+
+<li><strong>文件标签&lt;ftl_file&gt;&lt;/ftl_file&gt; </strong><br />
+	<textarea cols="100" rows="2" ><ftl_file path="hellowworld.txt"></ftl_file></textarea>
+</li>
+<li><strong>单元标签&lt;ftl_append&gt;&lt;/ftl_append&gt;  </strong><br />
+ 在文件修复时,会将该标签里面的内容添加到指定文件中,源文件中必须有@AppendGenCode标记,程序执行时,先找到含有这个标记的行,然后在该标记的上一行开始添加&lt;ftl_unit&gt;里的内容,如下:将在hellowworld里添加内容"append context"<br />
+ 	<textarea cols="100" rows="2" ><ftl_file path="hellowworld.txt"><ftl_unit>append context</ftl_unit></ftl_file></textarea>
+ 
+ </li>
+ 
+<li><strong>@AppendGenCode: </strong>修复文件时,程序执行时,先找到含有这个标记的行,然后在该标记的上一行开始添加&lt;ftl_unit&gt;里的内容</li>
+<li><strong>提示框标签 :</strong><br />
+&lt;ftl_warn&gt;&lt;/ftl_warn&gt;在预览或代码生产过程中,弹出该标签,即是提示用户,是否继续执行.点击是继续执行,否就停止执行.<br />
+&lt;ftl_err&gt;&lt;/ftl_err&gt;在预览或代码生产过程中,弹出该标签,预览或执行会停止.<br />
+这两个标签要放在&lt;ftl_head&gt;&lt;/ftl_head&gt;中间,一般作为判断模型是否满足该模板使用条件.
+eg:<br />
+<textarea cols="100" rows="10" >
+<ftl_head>
+{
+<#assign haspk="N">
+<#list sys.propList as p>
+ <#if p.an.isPk=='Y'>
+     <#assign pk=p>
+     <#assign haspk="Y">
+ </#if>
+
+</#list>
+<#if haspk=='N'>
+<ftl_err>请通过注释指定主键!</ftl_err>
+</#if>
+}
+</ftl_head>
+</textarea>
+</li>
+<li><strong>包含标签&lt;ftl_include&gt;&lt;/ftl_include&gt; </strong><br />
+eg:&lt;ftl_include id="11d51239-dfdd-47ae-a378-aa404be876e0"/&gt;</li>
+
+</ul>
+
+
+</div>
+
+</body>
+</html>

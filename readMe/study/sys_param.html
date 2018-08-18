@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div style="margin:10px;font-size:12px;">
+  <span class="tl">预设参数:</span><br />
+  预设参数由插件自动解析.java文件而得来.包含java文件自身定义的属性,也包含用户特定注入的注释(怎样快速添加注释,见注释章节).<br />
+  预设参数是个json对象，读取该对象时以sys为前缀，json里面的值是可以话的，以下是几个常用到的对象：<br />
+   1、【sys.propList】所有类的属性数组。<br/><br />
+	
+	&nbsp;&nbsp;&nbsp;<img src="images/sys_param1.png" /><br />
+	&nbsp;&nbsp;&nbsp; 如下代码遍历出类的所有的属性名<br />
+	&nbsp;&nbsp;&nbsp; <textarea cols="100" rows="5">
+<#list sys.propList as p>
+${p_index+1}、${p.propName}
+</#list>
+</textarea><br /><br />
+    2、【sys.clzSourceCode】java文件源代码路径<br />
+ &nbsp;&nbsp;&nbsp;在java文件所在源文件夹下生成一个Test.txt的文件。<br /><br />
+	&nbsp;&nbsp;&nbsp;<textarea cols="100" rows="3">
+<ftl_file path="${sys.clzSourceCode}/Test.txt">测试内容</ftl_file>
+</textarea>
+</div>
+</body>
+</html>

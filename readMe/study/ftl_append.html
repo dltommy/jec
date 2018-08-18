@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div style="margin:10px; line-height:18px;  font-size:12px;">
+<span class="tl">追加标签&lt;ftl_append&gt;&lt;/ftl_append&gt;.</span>
+  
+ 追加标检是针对文件修改时需要用到的标签,即使用这个标签的前提是这个文件已经存在了，该标签必须要嵌套在&lt;ftl_file/&gt;中才起作用<br />
+ 标签工作原理:<br />
+ 如下例，程序执行时,先找到含有@test标记的行,然后在该标记的上开始添加&lt;ftl_append&gt;里的内容,该模板执行后，将在helloworld.txt里添加内容"append context"<br />
+<textarea cols="100" rows="2" >
+<ftl_file path="helloworld.txt"><ftl_append target="@test">append context</ftl_append></ftl_file>
+</textarea>
+ <br /><br />
+ 执行前,hellowworld.txt内容<br /><br />
+ <img src="images/ftl_append0.png" /><br /><br />
+ 执行hellowworld.txt<br /><br />
+ <img src="images/ftl_append1.png" /><br /><br />
+ 追加标签要点击修改按钮才会执行，执行成功后，会在eclipse中自动打开修改过的文件。<br /><br />
+ <img src="images/ftl_append2.png" /><br /><br />
+ 
+ 
+ 
+
+</div>
+
+</body>
+</html>

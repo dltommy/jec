@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Read Me</title>
+<style>
+.tl{ color:blue; font-weight:bolder}
+.desc{ padding-left:18px;}
+</style>
+<script>
+function openwin(page)
+{
+    //var url = "study/iframe.html?page="+page;//+page;
+	var url = "study/"+page;//+page;
+    //var sFeatures="dialogWidth:1000px;dialogHeight:600px;scroll:yes;";
+  	//window.showModalDialog(url, "", sFeatures);
+	//window.showModelessDialog(url, "", sFeatures);
+	//showModelessDialog
+	
+	var sFeatures = "height=600,width=1000,resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no,location=no";
+	window.open(url,"",sFeatures);
+}
+</script>
+</head>
+
+<body>
+
+<div style="margin:5px; padding:10px; line-height:20px; font-size:12px">
+<H2>前言</H2>
+    <div class="desc">
+	 一个好的框架一定是在技术层面上进行了高度抽象封装和代码复用提炼的，而一个好的编码工具旨在提示编码效率同时，同时指导用户怎样使用该框架。<br/>
+	说明:<br />
+	1、生成的代码不受架构，各种框架等限制，生成任意文本类型的文件。<br />
+	2、可视化的文档操作界面，非常灵活的选择想要生成的文档。<br />
+	3、操作简单。<br />
+	 难点就是要写一个好的模板，模板是一次性编写的工作，写好后永久保存，好的模板在工具可视化上体现为文件的目录结构明了，鼠标选中后会有注释，执行时有校验和提示向导，让用户一看就知道生成的内容是实现什么逻辑，生成相关文件需要满足的条件。<br />
+	 
+	</div>    
+    <H2>第一章:概述</H2>
+ 
+<div class="desc">
+代码生成原理:模板+数据=代码<br /> 
+设计驱动开发，这里的设计指的是用户写的java类(实体类，接口类等)。<br />
+简单讲就是一个简单的POJO类(或接口)，加上用户的业务注释，生成相关的文件代码，工具将用户的注释和POJO类的属性（或接口的方法）全解析成一个可视化的JSON数据（见【数据】章节），供模板编写调用。<br />
+模板采用freemarker语法编写，同时定义了一些模板编写规则，以及新增了一些模板标签标签（见【模板】章节）。
+
+</div>
+  
+ 
+<H2>第二章:模板</H2>
+<div class="desc">代码生成中，模板创建是最关键的，一个模板可以生成一个文件，也可以生成多个文件，当然也可以一个都不生成(仅仅在弹出框生成个预览参考的代码)，
+在模板中将这些都定义好后，工具会自动将模板转换成可视化的操作界面，选中自己想要的文件，一键生成即可，<a href="javascript:openwin('example.html');">查看样例</a>。<br />
+如何创建一个模板，<a href="javascript:openwin('how_create.html');">点击查看</a>。<br />
+模板一旦创建后，可以存放在本地，也可以存放到服务器共享给其他用户。用户可以使用本地模板，也可以直接使用服务器上的模板。<br /> 
+除了会使用freemarker语法外，还必须得掌握如下几个标签，如下这些标签非freemarker标签。<br />
+
+1、<a href="javascript:openwin('ftl_head.html');">模板结构标签</a><br />
+2、<a href="javascript:openwin('ftl_file.html');">文件生成标签</a><br />
+3、<a href="javascript:openwin('ftl_tips.html');">提示框标签</a><br />
+4、<a href="javascript:openwin('ftl_append.html');">文档修改标签</a><br />
+
+
+</div>
+ 
+
+
+
+
+<H2>第三章:数据</H2>
+
+<div class="desc">数据来源于四个方面:<br />
+1、内置参数,<br />
+&nbsp;&nbsp;<a href="javascript:openwin('inner_param.html');">查看明细</a><br />
+2、Java文件编译对象，工具将java文件转换成了一个大的json对象，这个json中包含了对象的所有属性和方法<br />
+&nbsp;&nbsp;<a href="javascript:openwin('sys_param.html');">查看明细</a><br />
+3、Java注释，包含在/**&lt;EasyCode&gt;&lt;/EasyCode&gt;*/中的注解，也是一个json对象，将注释格式定义好后，工具可以自动添加注释，而不用手工敲打编写。<br />
+&nbsp;&nbsp;<a href="javascript:openwin('anno_param.html');">查看明细</a><br />
+4、用户自定义参数，在界面上有体现，也是一个json对象，建议模板的易变部分通过用户参数控制。<br />
+&nbsp;&nbsp;<a href="javascript:openwin('user_param.html');">查看明细</a><br />
+
+ 
+</div>
+
+
+<H2>第四章:工具使用</H2>
+<div class="desc"><a href="javascript:openwin('install.html');">插件安装</a><br />
+<a href="javascript:openwin('how_use.html');">工具使用</a><br />
+</div>
+
+<H2>第五章:其他</H2>
+<div class="desc">
+<a href="javascript:openwin('multLang.html');">多语言</a><br />
+<a href="javascript:openwin('pojo.html');">数据库表转换java对象工具</a><br />
+</div>
+
+</div>
+
+</body>
+</html>
