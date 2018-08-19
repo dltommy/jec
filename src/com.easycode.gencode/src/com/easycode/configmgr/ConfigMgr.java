@@ -20,6 +20,7 @@ import com.easycode.common.FileUtil;
 import com.easycode.common.XmlUtil;
 import com.easycode.configmgr.model.Config;
 import com.easycode.configmgr.model.Config.DB;
+import com.easycode.resource.MultLang;
 
 public class ConfigMgr implements IConfigMgr{
 	 
@@ -152,7 +153,7 @@ public class ConfigMgr implements IConfigMgr{
     {
     	Config ret = new Config();
     	ret.setLocalTemplatePath("$ECLIPSE_INSTALL_PATH/JEC_TEMPLATE");
-    	ret.setSrvUrl("http://www.jeasycode.org/easycode/services/GenCodeService");
+    	ret.setSrvUrl(MultLang.getMultLang("code.100"));
     	ret.setUserName("guest");
     	ret.setPassword("guest");
     	ret.setCodeType("JAVA;HTML");
