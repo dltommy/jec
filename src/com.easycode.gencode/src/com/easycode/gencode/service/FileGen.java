@@ -314,7 +314,7 @@ public class FileGen
 					else
 					{
 
-						md = RpcFactory.httpSrv(wasUrl).getCodegenMudlsByMudId(
+						md = RpcFactory.httpSrv(wasUrl).getCodegenMudlsByMudId("jec",
 								id);
 					}
 				}
@@ -333,7 +333,7 @@ public class FileGen
 				{
 					try
 					{
-					    md = RpcFactory.httpSrv(wasUrl).getCodegenMudlsByMudId(
+					    md = RpcFactory.httpSrv(wasUrl).getCodegenMudlsByMudId("jec",
 							id);
 					}
 					catch(Exception e)

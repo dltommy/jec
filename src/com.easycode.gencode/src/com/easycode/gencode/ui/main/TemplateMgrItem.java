@@ -312,7 +312,7 @@ public class TemplateMgrItem extends CTabItem
                             box.open();
                             return;
                         }
-                        else
+                        else if ("0000".equals(res))
                         {
 
                             // optResult.setText("Success("
@@ -324,6 +324,17 @@ public class TemplateMgrItem extends CTabItem
                             box.setText("提示信息");
                             // 设置对话框显示的消息
                             box.setMessage(MultLang.getMultLang("code.081"));// 同步成功
+                            box.open();
+                            return;
+                        }
+                        else
+                        {
+                            MessageBox box = new MessageBox(topShell,
+                                    SWT.APPLICATION_MODAL | SWT.ICON_ERROR);
+                            // 设置对话框的标题
+                            box.setText("提示信息");
+                            // 设置对话框显示的消息
+                            box.setMessage(MultLang.getMultLang("code.076"));// 操作失败
                             box.open();
                             return;
                         }
@@ -727,7 +738,7 @@ public class TemplateMgrItem extends CTabItem
                     // 设置对话框的标题
                     box.setText("Error");
                     // 设置对话框显示的消息
-                    box.setMessage("Err privilege");
+                    box.setMessage("只能操作自己创建的模板！");
                     box.open();
                 }
                 else

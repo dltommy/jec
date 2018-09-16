@@ -36,7 +36,7 @@ public interface IRpcDS
 	 * @param mudId
 	 * @return
 	 */
-	public CodegenTemplate getCodegenMudlsByMudId(String mudId)  throws Exception;
+	public CodegenTemplate getCodegenMudlsByMudId(String opter, String mudId)  throws Exception;
 	
 	/**
 	 * 
@@ -49,7 +49,7 @@ public interface IRpcDS
 	 * @param eachPageSize
 	 * @return
 	 */
-	public List<String> queryCodegenMudlsPageList2(String seedId,String mdlId, String bookmark,String mdlCtx, String codeType, int beginPos, int eachPageSize)  throws Exception;
+	public List<String> queryCodegenMudlsPageList2(String opter, String seedId,String mdlId, String bookmark,String mdlCtx, String codeType, int beginPos, int eachPageSize)  throws Exception;
     /**
      * 
      * 功   能:

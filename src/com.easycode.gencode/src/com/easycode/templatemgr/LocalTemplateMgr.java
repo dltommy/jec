@@ -80,7 +80,8 @@ public class LocalTemplateMgr implements ITemplateMgr
 			document = sb.build(totalConfigFile);
 			itemsEle = document.getRootElement();
 		} else {
-			 throw new Exception("模板文件不存在！");
+			 //throw new Exception("模板文件不存在！");
+			return;
 		}
 	    List<Element> eleList = itemsEle.getChildren();
 	    Element removeTemp = null;

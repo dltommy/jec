@@ -293,7 +293,7 @@ public class CustomDialog extends Dialog implements MouseListener
 		}
 
 		);
-
+/*
 		final Button button = new Button(optCom, SWT.Activate);
 		button.setText("保存到服务器");
 		button.setBounds(90, 50, 70, 30);
@@ -324,6 +324,7 @@ public class CustomDialog extends Dialog implements MouseListener
 			}
 		});
 
+		*/
 		final Button closeBut = new Button(optCom, SWT.Activate);
 		closeBut.setText("关闭");
 		closeBut.setBounds(90, 50, 70, 30);

@@ -896,7 +896,7 @@ public class MainUi implements MouseListener,IReload
                 // bookmark = serverBookmarkQry.getInput().trim();
                 templateItem.turnToLocal.setText("同步到本地");//
                 retList = RpcFactory.httpSrv(config.getSrvUrl())
-                        .queryCodegenMudlsPageList2(querySeed, queryId,
+                        .queryCodegenMudlsPageList2(config.getUserName(), querySeed, queryId,
                                 queryBookmark, mulCtx, codeSelect, beginPos,
                                 eachPageSize);
 
@@ -1154,7 +1154,7 @@ public class MainUi implements MouseListener,IReload
             else
             {
                 md = RpcFactory.httpSrv(config.getSrvUrl())
-                        .getCodegenMudlsByMudId(templateId);
+                        .getCodegenMudlsByMudId(config.getUserName(),templateId);
                 this.setServerMdlVersion(fd.format(md.getLastUpdatedDate()));
             }
             if (md != null)
@@ -1331,7 +1331,7 @@ public class MainUi implements MouseListener,IReload
                 else
                 {
                     md = RpcFactory.httpSrv(config.getSrvUrl())
-                            .getCodegenMudlsByMudId(mudId);
+                            .getCodegenMudlsByMudId(config.getUserName(),mudId);
                     this.md.setServerMdlVersion(fd.format(md
                             .getLastUpdatedDate()));
                 }

@@ -54,14 +54,15 @@ public class HttpRpcDS implements IRpcDS
         return new String(HttpUtil.httpPost(url, blist));
 	}
 	
-	public CodegenTemplate getCodegenMudlsByMudId(String mudId) throws Exception
+	public CodegenTemplate getCodegenMudlsByMudId(String opter, String mudId) throws Exception
 	{ 
 		 
 		List<FormItem> blist = new ArrayList<FormItem>();
 		                                   
 		blist.add(new FormItem( "method","getCodegenMudlsByMudId"));
 		blist.add(new FormItem( "templateId",mudId));
-	 
+		blist.add(new FormItem( "opter",opter));
+		
 		byte[] ret = HttpUtil.httpPost(url, blist);
 		Map<String,String> resMap = ZipUtil.unzipItems(ret);
 		String ctx = resMap.get("templateCtx");
@@ -211,10 +212,11 @@ public class HttpRpcDS implements IRpcDS
 		// RpcDS.getInstance().test();
 	}
 
-	public List<String> queryCodegenMudlsPageList2(String author, String templateId,String title,String templateCtx, 
+	public List<String> queryCodegenMudlsPageList2(String opter, String author, String templateId,String title,String templateCtx, 
 			String codeType, int beginPos, int eachPageSize) throws Exception
 	{ 
 		JSONObject obj = new JSONObject();
+		obj.put("opter", opter);
 		obj.put("author", author);
 		obj.put("templateId", templateId);
 		obj.put("title", title);
