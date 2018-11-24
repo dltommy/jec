@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -38,12 +39,10 @@ public class PreparedParamItem extends CTabItem
     Button reloadBut = null;
     Text preparedParam = null;
     TreeViewer preparedParamTree = null;
-    
-  
-     PreparedParamTreeContentProvider preparedParamTreeContentProvider = new PreparedParamTreeContentProvider();
-     PreparedParamTreeLabelProvider preparedParamTreeLabelProvider = new PreparedParamTreeLabelProvider();
-    
-    
+
+    PreparedParamTreeContentProvider preparedParamTreeContentProvider = new PreparedParamTreeContentProvider();
+    PreparedParamTreeLabelProvider preparedParamTreeLabelProvider = new PreparedParamTreeLabelProvider();
+
     public PreparedParamItem(CTabFolder parent, int style, final MainUi root)
     {
         super(parent, style);
@@ -51,26 +50,28 @@ public class PreparedParamItem extends CTabItem
         this.root = root;
         SashForm prepareParamTabItemSash = new SashForm(parent, SWT.VERTICAL);
         prepareParamTabItemSash.setLayout(new FormLayout());
-        prepareParamTabItemSash.setLayoutData(root.bothFillData); 
- 
-        Composite prepardCom = new Composite(prepareParamTabItemSash, SWT.COLOR_WHITE);
+        prepareParamTabItemSash.setLayoutData(root.bothFillData);
+
+        Composite prepardCom = new Composite(prepareParamTabItemSash,
+                SWT.COLOR_WHITE);
         GridLayout prepardComout = new GridLayout();
         prepardComout.numColumns = 2;
         prepardCom.setLayout(prepardComout);
         prepardCom.setLayoutData(root.bothFillData);
+
+        ILoadPreparedParam load = root.loadPreparedParam;
 
         fileSelect = new Combo(prepardCom, SWT.FLAT | SWT.COLOR_WHITE
                 | SWT.READ_ONLY);
         fileSelect.setItems(this.root.paramFrom);
 
         fileSelect.select(0);
-        
-           reloadBut = new Button(prepardCom, SWT.FLAT
-                | SWT.COLOR_WHITE);
+
+        reloadBut = new Button(prepardCom, SWT.FLAT | SWT.COLOR_WHITE);
         reloadBut.setText(MultLang.getMultLang("code.012"));// 重新载入
         GridData reloadButGD = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
         reloadBut.setLayoutData(reloadButGD);
-        
+
         preparedParam = new Text(prepardCom, SWT.BORDER | SWT.MULTI
                 | SWT.COLOR_WHITE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.WRAP);
         preparedParam
@@ -79,127 +80,172 @@ public class PreparedParamItem extends CTabItem
         preparedParamData.horizontalSpan = 2;
         preparedParam.setLayoutData(preparedParamData);
         preparedParam.setEditable(false);
-        
-        
+
         GridData preparedParamTreeGridData = new GridData(GridData.FILL_BOTH);
         preparedParamTreeGridData.horizontalSpan = 2;
 
-        Composite preparedtreeComp =   new Composite(prepareParamTabItemSash, SWT.NONE);
-        
+        Composite preparedtreeComp = new Composite(prepareParamTabItemSash,
+                SWT.NONE);
+
         preparedtreeComp.setLayout(this.root.commonLayout);
         preparedtreeComp.setLayoutData(preparedParamTreeGridData);
-        
-        preparedParamTree = new TreeViewer(preparedtreeComp, SWT.BORDER | SWT.MULTI
-         | SWT.COLOR_WHITE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.WRAP);
+
+        preparedParamTree = new TreeViewer(preparedtreeComp, SWT.BORDER
+                | SWT.MULTI | SWT.COLOR_WHITE | SWT.H_SCROLL | SWT.V_SCROLL
+                | SWT.WRAP);
         preparedParamTree.getTree().setLayoutData(this.root.bothFillData);
-        
+
         prepareParamTabItemSash.setWeights(new int[]
         { 70, 30 });
         this.setControl(prepareParamTabItemSash);
         init();
     }
+
     private void init()
     {
-        fileSelect.addSelectionListener(new SelectionListener()
+        if (fileSelect != null)
         {
-
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
-                // TODO Auto-generated method stub
-
-            }
-
-            public void widgetSelected(SelectionEvent arg0)
+            fileSelect.addSelectionListener(new SelectionListener()
             {
 
-                //String modelPkg = prjConfig.getPkgConfig().getModelPkg();
-                Combo comb = (Combo) arg0.getSource();
-                // String filePath = (srcRoot +
-                // comb.getText()).replaceAll("\\.", "/");
-
-                JavaSrcParse clzObj = new JavaSrcParse(root.templateItem.annoText.getText(),
-                        root.curMudId, root.pkgSource, root.compUnit);
-                try
+                public void widgetDefaultSelected(SelectionEvent arg0)
                 {
-                    root.prepardDataCtx = clzObj.getClzJson(null, root.config);
-                    preparedParam.setText(root.prepardDataCtx);
+                    // TODO Auto-generated method stub
+
                 }
-                catch (Exception e)
+
+                public void widgetSelected(SelectionEvent arg0)
                 {
+
+                    Combo comb = (Combo) arg0.getSource();
+
+                    ILoadPreparedParam load = root.loadPreparedParam;
                     
-                    EclipseUtil.proExcept(topShell, e,"预设参数解析异常，控制台查看详情!");
+                    if (load instanceof LoadPOJOParam)
+                    {
+                        LoadPOJOParam p = (LoadPOJOParam)load;
+                        p.init(root.templateItem.annoText.getText(),
+                            root.curMudId, root.pkgSource, root.config);
  
-                }
+                    }
+                    else if(load instanceof LoadDBParam)
+                    {
+                        LoadDBParam db = (LoadDBParam)load;
+                        String tab = fileSelect.getText();
+                        
+                        db.init(root.curMudId, tab,root.config);
+                    }
+                    else if(load instanceof LoadJsonParam)
+                    {
+                        LoadJsonParam db = (LoadJsonParam)load;
+                        String tab = fileSelect.getText();
+                        
+                        db.init(root.curMudId);
+                    }
+                    try
+                    {
+                        root.prepardDataCtx = load.reload(); 
+                                                            
+                        preparedParam.setText(root.prepardDataCtx);
+                        
+                        preparedParamTreeContentProvider.init(preparedParam.getText());
+                        preparedParamTree
+                                .setContentProvider(preparedParamTreeContentProvider);
+                        preparedParamTree.setLabelProvider(preparedParamTreeLabelProvider);
+                        preparedParamTree.setInput("sys");
+                        
+                    }
+                    catch (Exception e)
+                    {
 
-            }
-        });
-        
-        reloadBut.addMouseListener(new MouseListener()
+                        EclipseUtil.proExcept(topShell, e, "预设参数解析异常，控制台查看详情!");
+
+                    }
+                    
+
+                }
+            });
+        }
+
+        if (reloadBut != null)
         {
-
-            public void mouseDoubleClick(MouseEvent arg0)
-            {
-            }
-
-            public void mouseDown(MouseEvent arg0)
-            {
-            }
-
-            public void mouseUp(MouseEvent arg0)
-            {
-                reloadPreparedData(true);
-                //preparedParamTreeContentProvider = 
- 
-                //preparedParamTree.expandAll();
-            }
-        });
-    }
-    
-    public void reloadPreparedData(boolean reload)// throws Exception
-    {
-        // if (reload)
-        {
-            try
+            reloadBut.addMouseListener(new MouseListener()
             {
 
-                JavaSrcParse clzObj = new JavaSrcParse(root.templateItem.annoText.getText(),
-                        root.curMudId, root.pkgSource,
-
-                        CompilationUnitParseUtil.getCompUnit(root.pkgSource + "/"
-                                + fileSelect.getText().replaceAll("\\.", "/")
-                                + ".java", root.compUnit.getResource().getProject()));
-
-                root.prepardDataCtx = clzObj.getClzJson(null, root.config);
-                preparedParam.setText(root.prepardDataCtx);
-                
-                
-                
-                preparedParamTreeContentProvider.init(preparedParam.getText());
-                preparedParamTree.setContentProvider(preparedParamTreeContentProvider);
-                preparedParamTree.setLabelProvider(preparedParamTreeLabelProvider);
-                preparedParamTree.setInput("sys");
-                
-            }
-            catch (Exception e)
-            {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                PrintStream ps = new PrintStream(baos);
-                e.printStackTrace(ps);
-                preparedParam.setText(baos.toString());
-                try
+                public void mouseDoubleClick(MouseEvent arg0)
                 {
-                    baos.close();
                 }
-                catch (IOException e1)
-                {
-                    e1.printStackTrace();
-                }
-                // throw e;
-            }
 
+                public void mouseDown(MouseEvent arg0)
+                {
+                }
+
+                public void mouseUp(MouseEvent arg0)
+                {
+                    reloadJavaPreparedData(true);
+                    // preparedParamTreeContentProvider =
+
+                    // preparedParamTree.expandAll();
+                }
+            });
         }
 
     }
 
+    public void reloadJavaPreparedData(boolean reload)// throws Exception
+    {
+        try
+        {
+
+            ILoadPreparedParam load = root.loadPreparedParam;
+            if (load instanceof LoadPOJOParam)
+            {
+                ICompilationUnit unit = CompilationUnitParseUtil.getCompUnit(
+                        root.pkgSource + "/"
+                                + fileSelect.getText().replaceAll("\\.", "/")
+                                + ".java", load.getProject());
+                LoadPOJOParam p = (LoadPOJOParam)load;
+                p.reset(root.templateItem.annoText.getText(), root.curMudId,
+                        root.pkgSource, unit, root.config);
+            }
+            else if (load instanceof LoadDBParam)
+            {
+                LoadDBParam db = (LoadDBParam)load;
+                String tab = fileSelect.getText();
+               
+                db.reset(root.curMudId, tab);
+            }
+            else if (load instanceof LoadJsonParam)
+            {
+                LoadJsonParam db = (LoadJsonParam)load;
+                db.reset(root.curMudId);
+            }
+            preparedParam.setText(load.reload());
+
+            preparedParamTreeContentProvider.init(preparedParam.getText());
+            preparedParamTree
+                    .setContentProvider(preparedParamTreeContentProvider);
+            preparedParamTree.setLabelProvider(preparedParamTreeLabelProvider);
+            preparedParamTree.setInput("sys");
+
+        }
+        catch (Exception e)
+        {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PrintStream ps = new PrintStream(baos);
+            e.printStackTrace(ps);
+            preparedParam.setText(baos.toString());
+            try
+            {
+                baos.close();
+            }
+            catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+            // throw e;
+        }
+
+    }
 
 }

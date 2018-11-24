@@ -25,7 +25,7 @@ import com.easycode.resource.MultLang;
 public class JSPMultiPageEditorContributor extends MultiPageEditorActionBarContributor {
 	private IEditorPart activeEditorPart;
 	private Action sampleAction;
-	private Action autoTagAction;
+	//private Action autoTagAction;
 	private Action autoTurnAciton;
 	/**
 	 * Creates a multi-page contributor.
@@ -101,8 +101,8 @@ public class JSPMultiPageEditorContributor extends MultiPageEditorActionBarContr
 		IMenuManager menu = new MenuManager(MultLang.getMultLang("code.071"));//多语言工具
 		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
 		menu.add(sampleAction);
-		menu.add(autoTagAction);
-		menu.add(autoTurnAciton);
+		//menu.add(autoTagAction);
+		//menu.add(autoTurnAciton);
 	}
 	public void contributeToToolBar(IToolBarManager manager) {
 		manager.add(new Separator());

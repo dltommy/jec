@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -16,12 +17,18 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.internal.ui.packageview.PackageFragmentRootContainer;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -31,6 +38,7 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.internal.Workbench;
 
 public class EclipseUtil
 {
@@ -65,6 +73,7 @@ public class EclipseUtil
         // 设置对话框显示的消息
         box.setMessage(msg);// 找不到配置文件
         box.open();
+         
     }
     
     public static void popErrorBox(Shell curShell, String msg)
@@ -287,4 +296,30 @@ public class EclipseUtil
 
     }
 
+    /**
+     * 在eclipse上创建一个文件
+     * @param fullPath
+     * @param ctx
+     * @param monitor
+     * @param output
+     * @throws Exception
+     */
+    public static void createFile(String prjName, String fileCtx) throws Exception
+    {
+        //IProject prj = getProject();
+        IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot root = workspace.getRoot();
+         
+        IResource res = root.findMember(new Path("/"+prjName+"/.settings"));
+        IContainer container = (IContainer) res;
+        IFile f = container.getFile(new Path("/prop.txt"));
+        InputStream in = null;
+
+        in = new ByteArrayInputStream(fileCtx.getBytes());
+
+        f.create(in, false, new NullProgressMonitor());
+       
+    }
+    
+    
 }

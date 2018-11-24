@@ -58,6 +58,7 @@ import org.eclipse.ui.ide.IDE;
 import com.easycode.configmgr.ConfigMgrFactory;
 import com.easycode.configmgr.model.Config;
 import com.easycode.gencode.ui.elements.ModelSelect;
+import com.easycode.gencode.ui.main.LoadPOJOParam;
 import com.easycode.gencode.ui.main.MainUi;
 import com.easycode.javaparse.JavaSrcParse;
 import com.easycode.resource.MultLang;
@@ -82,6 +83,7 @@ public class GenJavaCodeEditor extends MultiPageEditorPart implements
 	/** The font chosen in page 1. */
 	private Font font;
 
+	private IProject project;
 	/** The text widget used in page 2. */
 	private StyledText text;
 
@@ -124,7 +126,7 @@ public class GenJavaCodeEditor extends MultiPageEditorPart implements
 	}
 	public Map getSrcJson()
 	{
-		return this.maintance.getSrcJson();
+		return this.maintance.getSrcJson(this.project);
 	}
 	public String getCurMdlId()
 	{
@@ -151,6 +153,7 @@ public class GenJavaCodeEditor extends MultiPageEditorPart implements
 		//projectConfigPath = f.getFile().getLocation().toFile().getPath();
 
 		//System.err.println("projectConfigPath:"+projectConfigPath);
+		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 		IContainer rootContainer = root;
@@ -160,9 +163,9 @@ public class GenJavaCodeEditor extends MultiPageEditorPart implements
 		
 		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(f.getFile());
 		  
-		IProject prj = f.getFile().getProject();
+		this.project = f.getFile().getProject();
 		
-		projectPath = prj.getLocation().toFile()
+		projectPath = project.getLocation().toFile()
 				.getPath();
 		//prjConfig = ConfigMgr.newConfigByPrjPath(projectPath);
 		
@@ -221,7 +224,7 @@ public class GenJavaCodeEditor extends MultiPageEditorPart implements
             //projectPath,
 			ModelSelect mSelect = null;
 			maintance = new MainUi(mSelect,projectPath, prjConfig, composite,  projectName,
-			        clzObj.getParamFrom() ,pkgSource,unit);
+			        clzObj.getParamFrom() ,pkgSource,new LoadPOJOParam(unit));
 			
 			if(maintance != null)
 			{

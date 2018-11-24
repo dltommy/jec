@@ -36,6 +36,15 @@ public class HttpRpcDS implements IRpcDS
 	   this.url = url;
 	   
    }
+   public String checkCodegenSeed(String userName, String password) throws Exception
+   { 
+       List<FormItem> blist = new ArrayList<FormItem>();
+       blist.add(new FormItem( "method","checkCodegenSeed"));
+       blist.add(new FormItem( "userName",userName));
+       blist.add(new FormItem( "password", password));
+       return new String(HttpUtil.httpPost(url, blist));
+   }
+   
 	/**
 	 * 
 	 * 功   能:
@@ -87,31 +96,6 @@ public class HttpRpcDS implements IRpcDS
 		byte[] ret = HttpUtil.httpPost(url, blist);
 		return new String(ret);
 	}
-/*
-	public String deleteCodegenSeed(String seed, String pwd) throws Exception
-	{ 
-		QName opPrint = new QName(NAME_SPACE, "deleteCodegenSeed");
-
-		Class[] returnTypes = new Class[]
-		{ String.class };
-
-		Object[] retData = null;
-
-		Object obj[] = new Object[]
-		{ seed, pwd };
-
-		retData = serviceClient.invokeBlocking(opPrint, obj, returnTypes);
-		serviceClient.cleanupTransport();
-		if (retData != null && retData.length > 0)
-		{
-			return (String) retData[0];
-		}
-		else
-		{
-			return "0003";
-		}
-	}
- */
 
 	public String addCodegenMudls(String author, String pwd,String templateId, String title,
 			String templateCtx, String paramDesc, String codeType, String referId, String templateAnnoText) throws Exception
@@ -177,34 +161,7 @@ public class HttpRpcDS implements IRpcDS
 	    
 		blist.add(new FormItem( "template",zip.getCompressedByte(),false));
         return new String(HttpUtil.httpPost(url, blist));
-		
-		
-		
-		 
-	
-		/*
-		QName opPrint = new QName(NAME_SPACE, "updateCodegenMudls");
 
-		Class[] returnTypes = new Class[]
-		{ String.class };
-
-		Object[] retData = null;
-
-		Object obj[] = new Object[]
-		{ myseedId, myPwd, mdId, bookMark, mdlCtx, paramDesc, codeType,annoText };
-
-		retData = serviceClient.invokeBlocking(opPrint, obj, returnTypes);
-		serviceClient.cleanupTransport();
-		if (retData != null && retData.length > 0)
-		{
-			return (String) retData[0];
-		}
-		else
-		{
-			return null;
-		}
-		*/
-		 
 	}
 
 	public static void main(String arg[])

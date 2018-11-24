@@ -290,7 +290,10 @@ public class ReviewAction implements IWorkbenchWindowActionDelegate
                        
               
                         
-                        
+                        if(file.getLocation() == null)
+                        {
+                            return;
+                        }
                         filePath = file.getLocation().toFile().getPath();
                       
                         IProject project = file.getProject();

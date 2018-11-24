@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.easycode.javaparse.JavaSrcParse;
 import com.easycode.gencode.ui.IReload;
 import com.easycode.gencode.ui.elements.ModelSelect;
+import com.easycode.gencode.ui.main.LoadPOJOParam;
 import com.easycode.gencode.ui.main.MainUi;
 import com.easycode.configmgr.ConfigMgrFactory;
 import com.easycode.configmgr.model.Config;
@@ -40,18 +41,20 @@ public class ReviewDialog  extends Dialog
 			ModelSelect modelSelect,
 	       
 	        final String editFile,
+	        
 	        final String projectPath, 
 	        final String projectName, 
 	        final String pkgSource,  ICompilationUnit thisUnit)
 		{
 	    super(parent, SWT.NONE);
-	   
+	    //thisUnit.getResource().getProject();
 	    ICompilationUnit unit = thisUnit;
 	    if(modelSelect != null && modelSelect.getUnit() != null)
 	    {
 	    	unit = modelSelect.getUnit();
 	    }
-
+	     
+	    
 	      IReload maintance = null;
           this.pkgSource = pkgSource;
           this.parentShell = parent;
@@ -65,16 +68,10 @@ public class ReviewDialog  extends Dialog
 
             clzObj.getClzJson(null,config);
 
-            //IJavaProject javaProject = JavaCore.create(f.getFile().getProject());
-            //String pkgSource = this.getPkgSource(javaProject);
-            //projectPath
- 
 			
 			maintance = new MainUi(modelSelect,projectPath, config, parent, projectName, 
-                   clzObj.getParamFrom() ,pkgSource,unit);
-			
-			//maintance = new MainLayout(modelSelect,prjConfig, parent, projectName, 
-            //         clzObj.getParamFrom() ,pkgSource,unit);
+                   clzObj.getParamFrom() ,pkgSource, new LoadPOJOParam(unit));
+			 
             if(maintance != null)
             {
                 parent.pack();

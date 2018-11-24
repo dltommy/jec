@@ -28,8 +28,41 @@ public class ConfigMgr implements IConfigMgr{
 	private String filePath;
 	protected ConfigMgr(String filePath)
 	{
+	    
 		this.filePath = filePath;
 	}
+	   public void delDBConfig(String id, XmlUtil.Callback callback) throws Exception
+	   {
+	        File file = new File(this.filePath);
+	        Document document = null;
+	        boolean exists = false;
+	        if (file.exists()) {
+	            SAXBuilder sb = new SAXBuilder();
+	            document = sb.build(this.filePath);
+	            Element root = document.getRootElement();
+	            Element dbsItem = root.getChild("dbs");
+	            if (dbsItem != null) {
+	                List<Element> dbsList = dbsItem.getChildren();
+                    for(int i=0;i<dbsList.size();i++)
+                    {
+                        Element e = dbsList.get(i);
+                        if (e.getAttribute("id").getValue()
+                                .equals(id)) {
+                            dbsItem.removeContent(e);
+                            break;
+                        }
+                    }
+	                 
+	            }
+	           
+	           
+	        }
+	        //this.saveXML(document);
+	        XmlUtil.saveXML(document, this.filePath,callback);
+
+	    
+	       
+	   }
 	public void addOrUpdateDBConfig(DB dbconfig, XmlUtil.Callback callback) throws Exception
     {
 		File file = new File(this.filePath);
@@ -160,7 +193,7 @@ public class ConfigMgr implements IConfigMgr{
     	
     	
     	ret.setCommonLangProp("");
-    	ret.setMultLangFlag("<s:text name=\"[#prefix.#key]\"/>");
+    	ret.setMultLangFlag("<s:text name=\"[#prefix.#key]\"/><%/*#value*/%>");
     	ret.setLangProp("");
     	ret.setMultLangFilt("");
     	Element config = new Element("config");
@@ -257,6 +290,7 @@ public class ConfigMgr implements IConfigMgr{
 					db.setUrl(e.getChildTextTrim("url"));
 					db.setUsername(e.getChildTextTrim("username"));
 					db.setPassword(e.getChildTextTrim("password"));
+					db.setId(e.getAttributeValue("id"));
 					dbList.add(db);
 				}
 				ret.setDbList(dbList);

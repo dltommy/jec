@@ -14,6 +14,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 
 import com.easycode.common.XmlUtil;
 
@@ -21,8 +22,8 @@ public class ConfigMgrFactory
 {
 	public static IConfigMgr newByPrjPath(String prjPath)
 	{
-
-
+	    return newByDefault();
+/*
         ConfigMgr mgr = new ConfigMgr(prjPath+File.separator+"JEC_CODE"+File.separator+"config.xml");
  
         
@@ -31,7 +32,7 @@ public class ConfigMgrFactory
         XmlUtil.Callback back = new XmlUtil.Callback(){
             public void doback()
             {
-                // TODO Auto-generated method stub
+                
                 try
                 {
                     //项目第一次使用时,配置文件由io生成，生成后再刷新一次，使得文件在eclipse工作台上能看到。
@@ -46,7 +47,7 @@ public class ConfigMgrFactory
                 }
                 catch (Exception e)
                 {
-                    // TODO Auto-generated catch block
+                   
                     e.printStackTrace();
                 }
             }};
@@ -56,14 +57,20 @@ public class ConfigMgrFactory
             }
             catch (Exception e)
             {
-                // TODO Auto-generated catch block
+              
                 e.printStackTrace();
             }
         return mgr;
+        */
 	}
 	public static IConfigMgr newByByFilePath(String filePath)
 	{
-		return new ConfigMgr(filePath);
+	    return newByDefault();
+		//return new ConfigMgr(filePath);
 	}
-	
+	 public static IConfigMgr newByDefault()
+	 {
+	        String tmpPath = Platform.getInstallLocation().getURL().getFile()+File.separator + "easycode_template"+File.separator+"config.xml";
+	        return new ConfigMgr(tmpPath);
+	 }
 }

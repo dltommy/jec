@@ -14,95 +14,117 @@ import org.eclipse.swt.graphics.Image;
 import com.easycode.gencode.ui.PreparedParamTreeContentProvider.JSONKV;
 import com.easycode.gencode.ui.elements.SelectCheckBox;
 
-public class PreparedParamTreeLabelProvider implements ILabelProvider{
+public class PreparedParamTreeLabelProvider implements ILabelProvider
+{
 
-	public void addListener(ILabelProviderListener arg0) {
-		// TODO Auto-generated method stub
-	    //CellLabelProvider r;
-	}
+    public void addListener(ILabelProviderListener arg0)
+    {
+        // TODO Auto-generated method stub
+        // CellLabelProvider r;
+    }
 
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void dispose()
+    {
+        // TODO Auto-generated method stub
 
-	public boolean isLabelProperty(Object arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    }
 
-	public void removeListener(ILabelProviderListener arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    public boolean isLabelProperty(Object arg0, String arg1)
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	public Image getImage(Object arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public void removeListener(ILabelProviderListener arg0)
+    {
+        // TODO Auto-generated method stub
 
-	public String getText(Object arg0) {
-		// TODO Auto-generated method stub
+    }
 
-		if (arg0 != null)
-       {
+    public Image getImage(Object arg0)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-			JSONKV e = (JSONKV) arg0;
-			String keyInfo = "";// "\""+e.getKey()+"\"";
-			if (!"".equals(e.getKey())) {
-				keyInfo = "\"" + e.getKey() + "\"";
-			}
+    public String getText(Object arg0)
+    {
+        // TODO Auto-generated method stub
 
-			if (e.isArrayElement) {
-				keyInfo = "[" + e.getKey() + "]";
-				// return "["+e.getKey()+"]";
+        if (arg0 != null)
+        {
 
-			}
+            JSONKV e = (JSONKV) arg0;
+            String keyInfo = "";// "\""+e.getKey()+"\"";
+            if (!"".equals(e.getKey()))
+            {
+                keyInfo = "\"" + e.getKey() + "\"";
+            }
 
-			if (e.getValue() instanceof String)
-			{
-				if (e.isArrayElement)
-				{
-					return  "\"" + (String) e.getValue() + "\"";
-				}
-				if (!"".equals(e.getKey())) {
-					if (e.isArrayElement) {
-						return keyInfo;
-					} else {
-						return keyInfo + ":\"" + e.getValue() + "\"";
-					}
+            if (e.isArrayElement)
+            {
+                keyInfo = "[" + e.getKey() + "]";
+                // return "["+e.getKey()+"]";
 
-				} else {
-					return "\"" + (String) e.getValue() + "\"";
-				}
+            }
+             
+            if (e.getValue() instanceof String)
+            {
+                if (e.isArrayElement)
+                {
+                    return "\"" + (String) e.getValue() + "\"";
+                }
+                if (!"".equals(e.getKey()))
+                {
+                    if (e.isArrayElement)
+                    {
+                        return keyInfo;
+                    }
+                    else
+                    {
+                        return keyInfo + ":\"" + e.getValue() + "\"";
+                    }
 
-			}
-			else  if (e.getValue() instanceof Boolean) 
-			{
-				return keyInfo + ":"+e.getValue();
-			}
-			else  if (e.getValue() instanceof JSONArray) {
-				JSONArray js = (JSONArray) e.getValue();
-				return keyInfo + ":["+js.size()+"]";
-			} else if (e.getValue() instanceof JSONObject) {
-				JSONObject js = (JSONObject) e.getValue();
-				if(js.size()>0)
-				{
-					return keyInfo + ":{...}";
-				}
-				else
-				{
-					return keyInfo + ":{}";
-				}
-				
-			}
-			return keyInfo;// "\""+e.getKey()+"\"";
+                }
+                else
+                {
+                    return "\"" + (String) e.getValue() + "\"";
+                }
 
-		}
-		 
-			return "";
-		 
-		
-	}
+            }
+
+            // else if (e.getValue() instanceof Boolean )
+            // {
+            // return keyInfo + ":"+e.getValue();
+            // }
+            else if (e.getValue() instanceof JSONArray)
+            {
+                JSONArray js = (JSONArray) e.getValue();
+                return keyInfo + ":[" + js.size() + "]";
+            }
+            else if (e.getValue() instanceof JSONObject)
+            {
+                JSONObject js = (JSONObject) e.getValue();
+                if (js.size() > 0)
+                {
+                    return keyInfo + ":{...}";
+                }
+                else
+                {
+                    return keyInfo + ":{}";
+                }
+
+            }
+            else
+            {
+                return keyInfo + ":" + e.getValue();
+            }
+            // return keyInfo;// "\""+e.getKey()+"\"";
+
+        }
+
+        return "";
+
+    }
 
 }

@@ -244,7 +244,20 @@ public class JSPMultiPageEditor extends MultiPageEditorPart implements
 
 		Button bt = toolkit.createButton(leftCom, MultLang
 				.getMultLang("code.056"), SWT.NO);// 重新提取
-		
+		GridData a = new GridData(GridData.BEGINNING);
+		a.horizontalSpan = 2;
+		bt.setLayoutData(a);
+		 
+		/*
+		  Text resFile = toolkit.createText(leftCom, "", SWT.MULTI | SWT.BORDER
+	                | SWT.V_SCROLL | SWT.H_SCROLL | SWT.COLOR_WHITE);
+		  resFile.setSize(500, 100);
+		    GridData props = new GridData(GridData.BEGINNING); 
+		   
+		    
+		  resFile.setLayoutData(props);
+		  */
+		  
 		Composite rightCom = toolkit.createComposite(sf);
 		GridLayout rightLayout = new GridLayout();
 		rightCom.setLayout(rightLayout);
@@ -724,6 +737,7 @@ public class JSPMultiPageEditor extends MultiPageEditorPart implements
 
 			public void mouseUp(MouseEvent arg0)
 			{
+
 				// TODO Auto-generated method stub
 				filterMultLang.clear();
 				mulSrc.setText("");

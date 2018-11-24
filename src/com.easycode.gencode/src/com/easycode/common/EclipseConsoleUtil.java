@@ -5,6 +5,10 @@
  */
 package com.easycode.common;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleFactory;
@@ -96,4 +100,19 @@ public class EclipseConsoleUtil implements IConsoleFactory
         printer.println(message);
     }
 
+    public static void printExcept(Exception e, String tips)
+    {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        e.printStackTrace(ps);
+        printToConsole(tips+":"+baos.toString(), false);
+        try
+        {
+            baos.close();
+        }
+        catch (Exception e1)
+        {
+        }
+    }
 }

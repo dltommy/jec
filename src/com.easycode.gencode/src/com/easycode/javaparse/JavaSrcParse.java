@@ -34,6 +34,7 @@ import com.easycode.javaparse.model.java.JavaTypeModel;
 import com.easycode.javaparse.model.java.PropModel;
 import com.easycode.templatemgr.util.SrcUtil;
   
+import com.easycode.common.StringUtil;
 import com.easycode.configmgr.model.Config;
 
 /**
@@ -60,10 +61,10 @@ public class JavaSrcParse
     private AnnoClassModel clsRange = null;
     private List<DefaultAnno> defaultAnnoList = null; 
  
+
     public JavaSrcParse(ICompilationUnit compUnit)
     {
  
-    	 
         this.compUnit = compUnit;
  
         try
@@ -174,7 +175,7 @@ public class JavaSrcParse
                 }
             }
             String ret = SrcUtil.getJsonStr(clz);
-            return SrcUtil.formatOutput(ret);
+            return StringUtil.formatOutput(ret);
         }
         catch (Exception e)
         {
@@ -433,7 +434,7 @@ public class JavaSrcParse
              
 
             ret = SrcUtil.getJsonStr(newclz);
-            return SrcUtil.formatOutput(ret);
+            return StringUtil.formatOutput(ret);
         }
         catch (Exception e)
         {

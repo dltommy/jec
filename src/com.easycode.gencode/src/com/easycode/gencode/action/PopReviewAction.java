@@ -17,6 +17,7 @@ import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -60,6 +61,7 @@ public class PopReviewAction implements IObjectActionDelegate
 	private String filePath = null;
 
 	private ICompilationUnit compUnit = null;
+	private IFile file = null;
 	public PopReviewAction()
 	{
 	}
@@ -84,17 +86,24 @@ public class PopReviewAction implements IObjectActionDelegate
 		    if(filePath==null || !filePath.endsWith(".java"))
 		    {
 
-		    	//setScreenPoint(shell);
-		        ReviewDialog window = new ReviewDialog(shell,null  ,filePath,projectPath,projectName,pkgSource,compUnit);
-		          
-		        
-	            window.open();
+
+	            
+	               this.setScreenPoint(shell);
+	                ReviewJsonDialog window = new ReviewJsonDialog(shell, file);
+	 
+	                window.open();
 		    }
 		    else
 		    { 
-		        ReviewDialog window = new ReviewDialog(shell,null  ,filePath,projectPath,projectName,pkgSource,compUnit);   
+                setScreenPoint(shell);
+               ReviewDialog window = new ReviewDialog(shell,null  ,filePath,projectPath,projectName,pkgSource,compUnit);
+                 
+               
+               window.open();
+                
+		        //ReviewDialog window = new ReviewDialog(shell,null  ,filePath,projectPath,projectName,pkgSource,compUnit);   
 		        
-	            window.open();
+	            //window.open();
 		    }
 
 		}
@@ -115,35 +124,30 @@ public class PopReviewAction implements IObjectActionDelegate
 	{
 		// TODO Auto-generated method stub
 		//System.err.println("class:" + selection.getClass());
- 
+	   
 		if (selection instanceof TreeSelection)
 		{
 			TreeSelection structSelection = (TreeSelection) selection;
 			Object object = structSelection.getFirstElement();
-			//System.err.println("class2:" + object.getClass());
+	 
+			//Object firstElement = structSelection.getFirstElement();
+		    //if (!(firstElement instanceof IAdaptable)) {
+		    //    return  ;
+		    //}
+			/*
+			if (object instanceof IAdaptable ) {
+			    IFile file = (IFile) ((IAdaptable) object).getAdapter(IFile.class);
+			    this.file = file;
+			}
+			 */
+		   
+		   
 			if(object instanceof CompilationUnit)
 			{
 
 			    compUnit = (CompilationUnit)object;
 			    
-			 /*
-				 try
-				{
-					IEditorPart javaEditor = JavaUI.openInEditor(unit);
-				 
-				}
-				catch (PartInitException e1)
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				catch (JavaModelException e1)
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}  
-				 */
-				 
+		 
 			 
 			    filePath = compUnit.getResource().getLocation().toFile().getPath();//unit.getPath().toFile().getPath();
 				try
@@ -204,9 +208,14 @@ public class PopReviewAction implements IObjectActionDelegate
 				
 			}
 			else if (object instanceof File)
-			{
+			{ 
 				File c = (File) object;
-				compUnit = JavaCore.createCompilationUnitFrom(c);
+				this.file = c;
+				if(this.file.getName().endsWith(".java"))
+				{
+				    compUnit = JavaCore.createCompilationUnitFrom(c);    
+				}
+				
 				
 				this.projectPath = c.getProject().getLocation().toFile().getPath();
 			    filePath = c.getLocation().toFile().getPath();
@@ -214,29 +223,13 @@ public class PopReviewAction implements IObjectActionDelegate
 			    
 			    
 			    
-			    
-			    /*
-				ASTParser parser = ASTParser.newParser(AST.JLS3); 
-				parser.setKind(ASTParser.K_COMPILATION_UNIT);
-				parser.setSource(compUnit);
-				parser.setResolveBindings(true);
-				org.eclipse.jdt.core.dom.CompilationUnit cUnit = (org.eclipse.jdt.core.dom.CompilationUnit)parser.createAST(null);
-				AST ast = cUnit.getAST();
-				 */
+
 			}
 
 			
  
 			
-			/////////
-			//ASTParser parser = ASTParser.newParser(AST.JLS3);
-			//parser.setSource("".toCharArray()); 
-			//org.eclipse.jdt.core.dom.CompilationUnit unit = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null); 
-			//unit.recordModifications(); 
-			//unit.get
-			//AST ast = unit.getAST();
-			//ast.
-			////////
+
 
 			
 			

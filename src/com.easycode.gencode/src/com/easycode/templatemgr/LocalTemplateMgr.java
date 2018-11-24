@@ -342,6 +342,12 @@ public class LocalTemplateMgr implements ITemplateMgr
 	    	String tempTitle = t.getChild("title").getValue();
 	    	String tempAuthor = t.getChild("author").getValue();
 	    	String tempType = t.getChild("type").getValue();
+	    	
+	    	if(!codeType.equals("ALL") && !codeType.equals(tempType))
+	    	{
+	    	    continue;
+	    	}
+	    	
 	    	if(templateId != null && !"".equals(templateId.trim()))
 	    	{ 
 	    		if(!templateId.equals(tempId))
@@ -386,19 +392,6 @@ public class LocalTemplateMgr implements ITemplateMgr
 
 	}
    
-
-	public static void main(String arg[]) {
-		LocalTemplateMgr loc = new LocalTemplateMgr("c:"+File.separator +"loc",null);
-		System.err.println(File.separator);
-		try {
-			String id = loc.addTemplate(null,"10071845", "测试模板内容", "测试模板title", "{a:'a',b:'b'}", "JAVA", "abcd");
-			String id2 = loc.addTemplate(null,"10071845", "测试模板内容", "测试模板title", "{a:'a',b:'b'}", "JAVA", "abcd");
-		    loc.updateTemplate(id2,   "模板内容修改", "title修改", "{a:'upt'}", "CSS", "修改anno");
-		    loc.deleteTemplate(id);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+ 
  
 }

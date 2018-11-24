@@ -30,6 +30,7 @@ import org.eclipse.jdt.internal.core.SourceType;
 
 import com.easycode.common.FileUtil;
 import com.easycode.common.BaseObject;
+import com.easycode.javaparse.model.JECInfoModel;
 
 /**
  * 功能描叙:
@@ -69,6 +70,7 @@ public class JavaClzModel extends BaseObject
     private HashMap an = new HashMap<String,String>(); 
      
     private List<JavaAn> javaAnList = new ArrayList<JavaAn>();
+    public JECInfoModel jec = new JECInfoModel();
     
     /**
      * 
@@ -444,6 +446,7 @@ public class JavaClzModel extends BaseObject
 	}
 	public void setPrjPath(String prjPath)
 	{
+	    jec.setPrjName(prjPath);
 		this.prjPath = prjPath;
 	}
 	public String getSrcRoot()
@@ -487,6 +490,7 @@ public class JavaClzModel extends BaseObject
 	}
 	public void setTemplate(String template)
 	{
+	    jec.setTemplateId(template);
 		this.template = template;
 	}
 
@@ -496,6 +500,7 @@ public class JavaClzModel extends BaseObject
     }
     public void setType(String type)
     {
+        jec.setParamFrom(type);
         this.type = type;
     }
 
@@ -559,6 +564,14 @@ public class JavaClzModel extends BaseObject
 	public void setJavaAnList(List<JavaAn> javaAnList) {
 		this.javaAnList = javaAnList;
 	}
+    public JECInfoModel getJec()
+    {
+        return jec;
+    }
+    public void setJec(JECInfoModel jec)
+    {
+        this.jec = jec;
+    }
  
  
  

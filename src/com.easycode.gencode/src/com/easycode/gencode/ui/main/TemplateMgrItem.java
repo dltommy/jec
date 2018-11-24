@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.easycode.Constants;
 import com.easycode.common.EclipseUtil;
 import com.easycode.gencode.action.CustomDialog;
 import com.easycode.gencode.ui.SelectAllMouseListener;
@@ -455,7 +456,28 @@ public class TemplateMgrItem extends CTabItem
                 // Color color =
                 // Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
                 shell.setLayout(layout);
-                CustomDialog window = new CustomDialog(shell, root.projectPath,
+                
+                
+                String type = Constants.TEMPLATE_JAVA;
+                
+                
+                if(root.loadPreparedParam instanceof LoadPOJOParam)
+                {
+                    type = Constants.TEMPLATE_JAVA;
+                }
+                else if(root.loadPreparedParam instanceof LoadDBParam)
+                {
+                    type = Constants.TEMPLATE_DB;
+                }
+                else if(root.loadPreparedParam instanceof LoadJsonParam)
+                {
+                    type = Constants.TEMPLATE_JSON;
+                }
+                
+                
+                
+                
+                CustomDialog window = new CustomDialog(shell, type, root.projectPath,
                         root.config, root);
 
                 window.open();

@@ -55,7 +55,7 @@ public class SrcUtil<T>
 		JSONObject jsonObject = JSONObject.fromObject(jsonObjStr);
 		return jsonObject;
 	}
-	
+	 
 	public static void appendToMap(HashMap map, String jsonObjStr) throws Exception
 	{
 		
@@ -67,7 +67,7 @@ public class SrcUtil<T>
         	map.put(key, jsonObject.get(key));
         }
 	}
-  
+   
 	public static String getJsonStr(Object obj)
 	{
 		JSONObject arrayObj = JSONObject.fromObject(obj);
@@ -108,105 +108,4 @@ public class SrcUtil<T>
 	}
 
 
-	public static String formatOutput(String ctx)
-	{
-	    String blank = "        ";
-		if(ctx == null)
-		{
-			return null;
-		}
-		//双引号个数
-		int doubleQuotationCount = 0;
-		StringBuffer retBuf = new StringBuffer();
-		List<String> leftList = new ArrayList<String>();
-		leftList.add("{");
-		leftList.add("[");
-		//leftList.add("[");
-		List<String> rightList = new ArrayList<String>();
-		rightList.add("}");
-		rightList.add("]");
-		
-		List<String> wrapList = new ArrayList<String>();
-		wrapList.add(",");
-		
-		Stack<PosObj> stack = new Stack<PosObj>();
-		PosObj curStackPos = null;
-		//Stack<String> stack = new Stack<String>();
-		for(int i = 0;i<ctx.length();i++)
-		{
-			String cur = ctx.substring(i, i + 1);
-            if("\"".equals(cur))
-            {
-            	doubleQuotationCount ++;
-            }
-			if (leftList.contains(cur) && doubleQuotationCount % 2 == 0)
-			{
-				retBuf.append("\n");
-
-				for (int k = 0; k < stack.size(); k++)
-				{
-					retBuf.append(blank);
-				}
-				curStackPos = stack.push(new PosObj(i, cur));
-			}
-			else if (rightList.contains(cur) && doubleQuotationCount % 2 == 0)
-			{
-				retBuf.append("\n");
-				for (int k = 0; k < stack.size() - 1; k++)
-				{
-					retBuf.append(blank);
-				}
-				curStackPos = stack.pop();
-				curStackPos.pos = i;
-			}
-			//在引号里面的分行字符，不换行
-			if(wrapList.contains(cur) && doubleQuotationCount % 2 == 0)
-			{
-				//先打逗号，再换行
-				retBuf.append(cur);
-				retBuf.append("\n");
-				
-				for (int k = 0; k < stack.size(); k++)
-				{
-					retBuf.append(blank);
-				}
-			}
-			else
-			{
-				if (curStackPos != null)
-				{
-					if (curStackPos.pos == i - 1)
-					{
-						retBuf.append("\n");
-						for (int k = 0; k < stack.size(); k++)
-						{
-							retBuf.append(blank);
-						}
-						retBuf.append(cur);
-					}
-					else
-					{
-						retBuf.append(cur);
-					}
-				}
-				else
-				{
-					retBuf.append(cur);
-				}
-			}
-
-		}
-		//System.err.println(retBuf.toString());
-		return retBuf.toString();
-	}
-	private static class PosObj
-	{
-		public String letter;
-		public int pos;
-		public PosObj(int pos, String letter)
-		{
-			this.letter = letter;
-			this.pos = pos;
-		}
-	} 
 }

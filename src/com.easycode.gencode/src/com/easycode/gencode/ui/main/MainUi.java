@@ -24,6 +24,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher; 
 
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -49,6 +50,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text; 
 
+import com.easycode.Constants;
 import com.easycode.gencode.service.GenView;
 import com.easycode.gencode.ui.CheckBoxTreeContentProvider;
 import com.easycode.gencode.ui.CheckBoxTreeLabelProvider;
@@ -140,7 +142,7 @@ public class MainUi implements MouseListener,IReload
 
     protected String serverMdlVersion = null;
     protected String pkgSource = null;
-    protected ICompilationUnit compUnit = null;
+    //protected ICompilationUnit compUnit = null;
 
     protected GridData bothFillData = new GridData(GridData.FILL_BOTH);
     
@@ -165,17 +167,25 @@ public class MainUi implements MouseListener,IReload
     protected UserParamItem userParamItem = null;
     protected TemplateMgrItem templateItem = null; 
     protected OutLineItem helpItem = null;
+    protected ILoadPreparedParam loadPreparedParam = null;
+    /*
     public MainUi(ModelSelect modelSelect,final String projectPath,
             final Config config, final Composite topCom,
             final String projectName, final String paramFrom[],
             final String pkgSource, final ICompilationUnit compUnit)
             throws Exception
+            */
+            public MainUi(ModelSelect modelSelect,final String projectPath,
+                    final Config config, final Composite topCom,
+                    final String projectName, final String paramFrom[],
+                    final String pkgSource, final ILoadPreparedParam loadPreparedParam)
+                    throws Exception
     {
 
     	templateMgr = new LocalTemplateMgr(config.getLocalTemplatePath(),projectPath);
     	
         String byTemplateId = null;
-        this.compUnit = compUnit;
+        this.loadPreparedParam = loadPreparedParam;
         this.pkgSource = pkgSource;
         this.projectPath = projectPath;
         this.modelSelect = modelSelect;
@@ -195,12 +205,14 @@ public class MainUi implements MouseListener,IReload
         }
          
 
+        /*
         String configType[] = config.getCodeType().split(";");
         if (configType.length == 0)
         {
             configType = new String[]
             { "ALL" };
         }
+        */
 
         this.projectName = projectName;
         this.topCom = topCom;
@@ -308,9 +320,23 @@ public class MainUi implements MouseListener,IReload
 
             // 查询模板类型
             queryModelType = new Combo(leftTopCom, SWT.NONE | SWT.READ_ONLY);
-            queryModelType.setItems(configType);
-            queryModelType.select(0);
+        
+            queryModelType.setItems(Constants.TEMPLATE_TYPE);
+            //queryModelType.select(0);
 
+            if(loadPreparedParam instanceof LoadPOJOParam)
+            {
+                queryModelType.select(Constants.getTemplateIndex(Constants.TEMPLATE_JAVA));
+            }
+            else if(loadPreparedParam instanceof LoadDBParam)
+            {
+                queryModelType.select(Constants.getTemplateIndex(Constants.TEMPLATE_DB));
+            }
+            else if(loadPreparedParam instanceof LoadJsonParam)
+            {
+                queryModelType.select(Constants.getTemplateIndex(Constants.TEMPLATE_JSON));
+            }
+            queryModelType.setEnabled(false);
             // 查询模板位置
             queryModelPos = new Combo(leftTopCom, SWT.NONE | SWT.READ_ONLY);
             queryModelPos.setItems(new String[]
@@ -688,8 +714,9 @@ public class MainUi implements MouseListener,IReload
         return this.templateItem.getAnnoText();
     }
 
-    public Map getSrcJson()
+    public Map getSrcJson(IProject project)
     {
+        /*
         JavaSrcParse clzObj = new JavaSrcParse(templateItem.getText(), curMudId,
                 pkgSource,
 
@@ -697,15 +724,24 @@ public class MainUi implements MouseListener,IReload
                         pkgSource + "/"
                                 + fileSelect.getText().replaceAll("\\.", "/")
                                 + ".java", compUnit.getResource().getProject()));
+       */
+        
+        
+        JavaSrcParse clzObj = new JavaSrcParse(templateItem.getText(), curMudId,
+                pkgSource,
 
+                CompilationUnitParseUtil.getCompUnit(
+                        pkgSource + "/"
+                                + fileSelect.getText().replaceAll("\\.", "/")
+                                + ".java", project));
+        
         Map<String, Object> map = new HashMap<String, Object>();
         try
         {
         	map = SrcUtil.josnToMap(clzObj.getClzJson(null, config));
         }
         catch (Exception e)
-        {
-            // TODO Auto-generated catch block
+        { 
             e.printStackTrace();
         }
 
@@ -1133,8 +1169,7 @@ public class MainUi implements MouseListener,IReload
         // 先重置,再赋值
         templateItem.setText(MultLang.getMultLang("code.007"));// 模板
         // mdlHasEdit = false;
-        isFirstMdf = true;
-        // this.md.reloadPreparedData(true);
+        isFirstMdf = true; 
 
         this.checkdList.clear();
 
@@ -1192,8 +1227,8 @@ public class MainUi implements MouseListener,IReload
 
                 try
                 {
-                    // reloadPreparedData(true);
-                    preparedParamItem.reloadPreparedData(true);
+                   
+                    preparedParamItem.reloadJavaPreparedData(true);
                     try
                     {
                         // reloadCurFtlModelAndTree();
@@ -1296,8 +1331,7 @@ public class MainUi implements MouseListener,IReload
             // 先重置,再赋值
             templateItem.setText(MultLang.getMultLang("code.007"));// 模板
             // mdlHasEdit = false;
-            isFirstMdf = true;
-            // this.md.reloadPreparedData(true);
+            isFirstMdf = true; 
 
             this.md.checkdList.clear();
 
@@ -1369,7 +1403,7 @@ public class MainUi implements MouseListener,IReload
 
                     try
                     {
-                        preparedParamItem.reloadPreparedData(true);
+                        preparedParamItem.reloadJavaPreparedData(true);
 
                         // new FtlModel();
 

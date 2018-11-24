@@ -61,23 +61,28 @@ public class CustomDialog extends Dialog implements MouseListener
 	//private IConfigMgr prjConfig = null;
 	private Config config = null;
 	private String projectPath;
+	
+	private String templateType = null;
 	// 是否点击保存到服务器按钮 
-	public CustomDialog(Shell parent,String projectPath,Config config,IReload rd)
+	public CustomDialog(Shell parent, String templateType, String projectPath,Config config,IReload rd)
 	{
-		this(parent,config);
+		this(parent,config,templateType);
 		this.rd = rd;
 		this.projectPath = projectPath;
+
 	}
-	public CustomDialog(Shell parent,Config config)
+ 
+	public CustomDialog(Shell parent,Config config , String templateType)
 		{
 
 
 			super(parent, SWT.NONE);
 		    
-			 this.config = config;
-			 
-			//this.prjConfig = prjConfig;
+			this.config = config; 
 			this.parentShell = parent;
+		     this.templateType = templateType;
+			queryTypeList.add(templateType); 
+			/*
 			try
 			{
 				String configType[] = config.getCodeType().split(
@@ -96,9 +101,10 @@ public class CustomDialog extends Dialog implements MouseListener
 			{
 				e.printStackTrace();
 			}
+			*/
 			createContents();
 		}
-
+     
 	public void open()
 	{
 		parentShell.open();
@@ -293,38 +299,6 @@ public class CustomDialog extends Dialog implements MouseListener
 		}
 
 		);
-/*
-		final Button button = new Button(optCom, SWT.Activate);
-		button.setText("保存到服务器");
-		button.setBounds(90, 50, 70, 30);
-		button.addMouseListener(this);
-		
-		
-		
-		final Button loadSample = new Button(optCom, SWT.Activate);
-		loadSample.setText("加载样例");
- 
-		loadSample.addMouseListener(new MouseListener()
-		{
-
-			public void mouseDoubleClick(MouseEvent e)
-			{
-			}
-
-			public void mouseDown(MouseEvent e)
-			{
-
-			}
-
-			public void mouseUp(MouseEvent e)
-			{
-				annoCtx.setText(CommUtil.getResource("annoSample.ftl"));
-				codeSrc.setText(CommUtil.getResource("sample.ftl"));
-				bookmark.setText("样例");
-			}
-		});
-
-		*/
 		final Button closeBut = new Button(optCom, SWT.Activate);
 		closeBut.setText("关闭");
 		closeBut.setBounds(90, 50, 70, 30);

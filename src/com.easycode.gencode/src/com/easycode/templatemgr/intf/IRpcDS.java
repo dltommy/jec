@@ -18,6 +18,17 @@ import com.easycode.templatemgr.model.CodegenTemplate;
 public interface IRpcDS
 {
 
+    /**
+     * 
+     * 功   能:
+     * 实现流程:
+     * @param id
+     * @param pwd
+     * @return
+     * @throws Exception
+     */
+    public String checkCodegenSeed(String id, String pwd) throws Exception;
+    
 	/**
 	 * 
 	 * 功   能:

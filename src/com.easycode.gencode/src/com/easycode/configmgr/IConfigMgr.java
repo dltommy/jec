@@ -24,4 +24,6 @@ public interface IConfigMgr {
 	
 	public DB readDBConfig(String dbname) throws Exception;
 	
+    public void delDBConfig(String id, XmlUtil.Callback callback) throws Exception;
+	
 }

@@ -7,6 +7,7 @@ package com.easycode.dbtopojo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 /**
  * 功能描叙:
@@ -21,7 +22,14 @@ public class ConnectionBase
     	try
 		{
 			Class.forName(driver).newInstance();
-			ret = DriverManager.getConnection(url, user, pwd);
+			
+			Properties props = new Properties();
+			props.setProperty("user",user);props.setProperty("password",pwd); 
+			//针对mysql设置
+			props.setProperty("useInformationSchema", "true");
+			//this.pConnection = DriverManager.getConnection(this.url, props); 
+			
+			ret = DriverManager.getConnection(url, props);
 		}
 		catch (Exception e)
 		{

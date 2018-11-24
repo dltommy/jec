@@ -196,20 +196,22 @@ public class FileGen
 		}
 		try
 		{
-			String json = RegxUtil.getFirstRegFitCtx(this.ftlSrc,
-					"([\\s|\\S]*?</ftl_head>)");
-			json = initStrCtx(json, ws, mdlPath, locale, projectPath);
-
+			 //String json = RegxUtil.getFirstRegFitCtx(this.ftlSrc,
+			 //		"([\\s|\\S]*?</ftl_head>)");
+			 //json = initStrCtx(json, ws, mdlPath, locale, projectPath);
+ 
+			 String json  = this.ftlSrc;
 			if (json != null && !"".equals(json))
 			{
 
 				
 				json = this.initCtrl(json);// this.paraObj
-				
+				 
 				if (rebuildNode)
 				{
 					try
 					{
+ 
 						checkedBoxMap = new SelectCheckBox()
 								.getThreadNode(json);
 					}
@@ -377,7 +379,7 @@ public class FileGen
 	}
 	 
 
-	private String initCtrl(String headSrc)
+	private String initCtrl(String headSrc) throws Exception
 	{
 
 		StringTemplateLoader strLoader = new StringTemplateLoader();
@@ -414,27 +416,15 @@ public class FileGen
 		//root.put("propsNotFit", new PropsNotFit(root));
 		//root.put("getPropValue", new GetPropValue());
 		root.put("filtMatch", new FiltMatch());
-		root.put("filtNoMatch", new FiltNotMatch());
+		root.put("filtNotMatch", new FiltNotMatch());
 		root.put("queryByPath", new QueryByPath());
  
 		StringWriter sw = new StringWriter();
-		try
-		{
-			Template temp = conf.getTemplate("t1");
+ 
+		Template temp = conf.getTemplate("t1");
 			// temp.process(root, sw);
-			temp.process(root, sw);
-		}
-		catch (TemplateException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return e.getFTLInstructionStack();
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    temp.process(root, sw);
+ 
 		// System.out.println("生成编码内容:" + sw.toString());
 		String json = sw.toString();
 		
@@ -449,6 +439,10 @@ public class FileGen
 			return "";
 		}
 		
+		if(json == null || "".equals(json))
+		{
+		    return "";
+		}
 		try
 		{
 			headWarnErrList = RegxUtil.getWarnErrPatList(json, MainUi.errWarnRegx);

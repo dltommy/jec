@@ -377,7 +377,7 @@ public class AddMultLangAction extends Action
 					String matchTxt = txt;
 					if(txt.getBytes().length>=MAX_MD5_SWITCH)
 					{
-						System.err.println("长度超过50,通过md5匹配");
+						//System.err.println("长度超过50,通过md5匹配");
 						matchTxt = MD5_FLAG+ StringUtil.stringToMD5(txt);
 					}
 					boolean isCommon = false;
