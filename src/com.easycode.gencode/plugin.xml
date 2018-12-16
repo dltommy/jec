@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+  <extension
+       id="pop.commoand1"
+       point="org.eclipse.ui.commands">  
+   <!--
+   <command  
+         description="multlanguage"  
+         id="client.action.ReviewActionBind"  
+         name="Generator">  
+   </command>
+   -->
+   
+   
+   <category
+         id="com.easycode.gencode.commands.category"
+         name="Sample Category">
+   </category>
+   <command
+         categoryId="com.easycode.gencode.commands.category"
+         id="com.easycode.gencode.commands.sampleCommand"
+         name="数据库工具">
+   </command>  
+   <command
+         categoryId="com.easycode.gencode.commands.category"
+         id="com.easycode.gencode.handlers.CodeGenHandler"
+         name="Gen Tool">
+   </command>  
+   
+</extension>  
+ 
+ <!--
+ <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Easy Code"
+            visible="true"
+            id="HelloWorld.actionSet">
+      
+         <action
+               definitionId="client.action.ReviewActionBind"
+               label="Easy Code"
+               icon="icons/sample.png"
+               class="com.easycode.gencode.action.ReviewAction"
+               tooltip=""
+              
+               toolbarPath="sampleGroup"
+               id="client.action.ReviewAction">
+         </action>
+        
+      </actionSet>
+   </extension>
+     -->
+
+ <extension
+        point="org.eclipse.ui.menus">
+     <menuContribution
+           locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+        <toolbar
+              id="com.easycode.gencode.handlers.CodeGen.toolbar"
+              label="JEC"
+              mnemonic="M">
+           <command
+                 commandId="com.easycode.gencode.handlers.CodeGenHandler"
+                 id="com.easycode.gencode.handlers.CodeGenHandler"
+                 icon="icons/sample.png"
+                 mnemonic="S">
+           </command>
+         
+        </toolbar>
+     </menuContribution>
+
+  </extension>
+  
+  
+  
+    <extension
+        point="org.eclipse.ui.menus">
+     <menuContribution
+           locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+        <menu
+              id="com.easycode.gencode.menus.sampleMenu"
+              label="JEC 工具"
+              mnemonic="M">
+           <command
+                 commandId="com.easycode.gencode.commands.sampleCommand"
+                 id="com.easycode.gencode.menus.sampleCommand"
+                 icon="icons/sample.png"
+                 mnemonic="S">
+           </command>
+           <!--
+           <command
+                 commandId="com.easycode.gencode.handlers.CodeGenHandler"
+                 id="com.easycode.gencode.menus.sampleCommand2"
+                 icon="icons/sample.png"
+                 mnemonic="S">
+           </command>
+           -->
+        </menu>
+     </menuContribution>
+
+  </extension>
+  
+  
+  
+  
+  
+  
+  
+  
+      <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            default="false"
+            name="Easy Code"
+            extensions="java"
+            icon="icons/sample.png"
+            contributorClass="com.easycode.gencode.javaeditor.GenJavaCodeEditorContributor"
+            class="com.easycode.gencode.javaeditor.GenJavaCodeEditor"
+            id="client.editors.gencode.cfg.GenJavaCodeEditor">
+      </editor>
+   </extension>
+   
+
+
+
+ <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Database Tool"
+            extensions="xml"
+            nameFilter="config.xml"
+            icon="icons/sample.png"
+          
+            contributorClass="com.easycode.configmgr.configeditor.ConfigCodeEditorContributor"
+            class="com.easycode.configmgr.configeditor.ConfigCodeEditor"
+            id="client.editors.gencode.cfg.ConfigEditor">
+      </editor>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            default="false"
+            name="多语言词条提取"
+            extensions="jsp,htm,html,vue,xml,txt,text"
+            icon="icons/sample.png"
+            contributorClass="com.easycode.jspeditor.editor.JSPMultiPageEditorContributor"
+            class="com.easycode.jspeditor.editor.JSPMultiPageEditor"
+            id="client.editors.gencode.jsp.JSPMultiPageEditor">
+      </editor>
+   </extension>
+  
+  
+  <extension point="org.eclipse.ui.bindings">  
+     <key  
+           commandId="client.editors.gencode.jsp.mulkj"  
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"  
+           sequence="Alt+Q">  
+      </key>
+      <!--
+     <key
+           commandId="com.easycode.gencode.commands.sampleCommand"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+6">
+     </key>  
+     -->
+  </extension>  
+  
+  <extension point="org.eclipse.ui.commands">  
+   <command  
+         description="multlanguage"  
+         id="client.editors.gencode.jsp.mulkj"  
+         name="Add Mutilang">  
+   </command>  
+</extension>  
+  
+ <extension point="org.eclipse.ui.actionSets">  
+      <actionSet  
+            id="client.editors.gencode.jsp.mulkjid"  
+            label="myActionSet"  
+            visible="false">  
+         <action  
+               definitionId="client.editors.gencode.jsp.mulkj"  
+               id="client.editors.gencode.jsp.id"  
+               label="open"  
+               retarget="true">  
+         </action> 
+      </actionSet>  
+   </extension>  
+  
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="java.lang.Object"
+            nameFilter="*.java"
+            id="PopMenu.contribution1">
+       <action
+               label="Easy Code"
+               class="com.easycode.gencode.action.PopReviewAction"
+               menubarPath="group1"
+              enablesFor="1"
+               icon="icons/sample.png"
+               id="PopMenu.newAction">
+       </action>
+          
+         
+       </objectContribution>
+   </extension>
+   
+      <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="java.lang.Object"
+            nameFilter="*.json"
+            id="PopMenu.contribution2">
+       <action
+               label="Easy Code"
+               class="com.easycode.gencode.action.PopReviewAction"
+               menubarPath="group1"
+              enablesFor="1"
+               icon="icons/sample.png"
+               id="PopMenu.newAction">
+       </action>
+          
+         
+       </objectContribution>
+   </extension>
+ 
+ <!--
+  <extension point="org.eclipse.ui.popupMenus">
+  
+      <objectContribution 
+        objectClass="org.eclipse.core.resources.IProject"
+            id="com.easycode.gencode.action.InitPrjectAction"
+            >
+ 
+         <action
+               enablesFor="1"
+               label="Database Tool"
+               icon="icons/sample.png"
+               class="com.easycode.gencode.action.InitPrjectAction"
+               id="Database_Tool"
+                >
+
+         </action>
+         
+      </objectContribution>
+    </extension>
+    -->
+    
+  <extension
+        point="org.eclipse.ui.handlers">
+     <handler
+           class="com.easycode.gencode.handlers.DatabaseToolHandler"
+           commandId="com.easycode.gencode.commands.sampleCommand">
+     </handler>
+     <handler
+           class="com.easycode.gencode.handlers.CodeGenHandler"
+           commandId="com.easycode.gencode.handlers.CodeGenHandler">
+     </handler>
+     
+     
+  </extension>
+ 
+
+   
+   
+    
+   
+   
+   
+ 
+</plugin>
