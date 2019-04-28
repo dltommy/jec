@@ -672,7 +672,7 @@ public class DBGenCodeEditor extends MultiPageEditorPart implements
         IProject[] prjs = root.getProjects();
 
         String prjName[] = new String[prjs.length + 1];
-        prjName[0] = "选择生成目录";
+        prjName[0] = "选择项目";
         int selectedIndex = 0;
         String curPrjName = getCurProjectName();
         for (int i = 0; i < prjs.length; i++)
@@ -795,6 +795,7 @@ public class DBGenCodeEditor extends MultiPageEditorPart implements
                     }
                     
                     DBCodeGenDialog d = new DBCodeGenDialog(new Shell(), m, tableArray, tableArray[0], projectPath, projectName);
+ 
                     d.open();
                 }
                 catch (Exception e)

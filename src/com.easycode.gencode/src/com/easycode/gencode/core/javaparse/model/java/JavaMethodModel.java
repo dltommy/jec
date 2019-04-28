@@ -10,7 +10,7 @@ public class JavaMethodModel   extends BaseObject
 {
     private String accessLimit = null;
     private String methodName = null;
-    private String methodDesc = null;
+    //private String methodDesc = null;
     private String[] exceptions = null;
     private JavaTypeModel returnType = null;
     private JavaParam[] paramArray = null;
@@ -112,7 +112,7 @@ public class JavaMethodModel   extends BaseObject
         this.an.put(key, value);
     }
 
-
+/*
 	public String getMethodDesc() {
 		return methodDesc;
 	}
@@ -121,7 +121,7 @@ public class JavaMethodModel   extends BaseObject
 	public void setMethodDesc(String methodDesc) {
 		this.methodDesc = methodDesc;
 	}
-
+*/
 
 	public List<JavaAn> getJavaAnList() {
 		return javaAnList;

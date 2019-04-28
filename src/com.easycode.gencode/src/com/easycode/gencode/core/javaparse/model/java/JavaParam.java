@@ -1,9 +1,13 @@
 package com.easycode.gencode.core.javaparse.model.java;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class JavaParam
 {
     private String paramName = null;
     private JavaTypeModel type = null;
+    private List<JavaAn> javaAnList = new ArrayList<JavaAn>();
     public JavaParam(String paramName,String className,boolean isArray)
     {
         this.paramName = paramName;
@@ -25,6 +29,14 @@ public class JavaParam
     public void setType(JavaTypeModel type)
     {
         this.type = type;
+    }
+    public List<JavaAn> getJavaAnList()
+    {
+        return javaAnList;
+    }
+    public void setJavaAnList(List<JavaAn> javaAnList)
+    {
+        this.javaAnList = javaAnList;
     }
     
 }

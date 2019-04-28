@@ -225,7 +225,10 @@ public class JavaClzModel extends BaseObject
             IProject javaProject =  compUnit.getResource() .getProject();
             for (String p : impPkg)
             {
-
+                if(p.endsWith(".*"))
+                {
+                    continue;
+                }
                 IFile file = javaProject.getFile(pkgSource+"/"+p.replaceAll("\\.", "/")+ ".java");
                 if(file != null && file.exists())
                 {

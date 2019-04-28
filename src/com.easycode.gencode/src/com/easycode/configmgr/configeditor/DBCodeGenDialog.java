@@ -4,7 +4,7 @@
  * 描 叙:
  */
 package com.easycode.configmgr.configeditor;
- 
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
@@ -30,53 +30,40 @@ import com.easycode.configmgr.model.Config;
 import com.easycode.configmgr.model.Config.DB;
 
 /**
- * 功能描叙:
- * 编   码:  
- * 完成时间: 2012-11-27 下午09:36:36
+ * 功能描叙: 编 码: 完成时间: 2012-11-27 下午09:36:36
  */
-public class DBCodeGenDialog  extends Dialog
+public class DBCodeGenDialog extends Dialog
 {
 
-	protected Shell parentShell; 
-  
- 
-	private String pkgSource = null;
-	private Config config = null;
- 
-	
-	public DBCodeGenDialog(
-	        Shell parent,  
-	        TableModel table,
-	         
-	          String[] tables,
-	          String selectedTable,
-              String projectPath, 
-              String projectName
-	         )
-		{
-	    //super(parent, SWT.NONE);
-	    super(parent);
-	    
- 
- 
-        
-          this.parentShell = parent;
-         
+    protected Shell parentShell;
+
+    private String pkgSource = null;
+    private Config config = null;
+
+    public DBCodeGenDialog(Shell parent, TableModel table,
+
+    String[] tables, String selectedTable, String projectPath,
+            String projectName)
+    {
+        // super(parent, SWT.NONE);
+        super(parent);
+
+        this.parentShell = parent;
+
         try
-        { 
-            config = ConfigMgrFactory.newByPrjPath(projectPath).readOrCreate(null);
- 
-            
-               
-            MainUi maintance = new MainUi(null,projectPath, config, parent , 
-                       
-                       projectName, tables ,null,new LoadDBParam(table  ));
-         
-            if(maintance != null)
+        {
+            config = ConfigMgrFactory.newByPrjPath(projectPath).readOrCreate(
+                    null);
+
+            MainUi maintance = new MainUi(null, projectPath, config, parent,
+
+            projectName, tables, null, new LoadDBParam(table));
+
+            if (maintance != null)
             {
-               parent.pack();
-               
-               // maintance.queryLocal();
+                parent.pack();
+
+                // maintance.queryLocal();
             }
         }
         catch (Exception e)
@@ -85,25 +72,16 @@ public class DBCodeGenDialog  extends Dialog
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             PrintStream ps = new PrintStream(baos);
             e.printStackTrace(ps);
-            // baos.toString();i
-                MessageBox box = new MessageBox( new Shell() ,SWT.APPLICATION_MODAL | SWT.ICON_ERROR);
-             //设置对话框的标题
-             box.setText("Error");
-             box.setMessage(baos.toString());
-             box.open();
-             //设置对话框显示的消息
-             //内容部能为空
+            MessageBox box = new MessageBox(new Shell(), SWT.APPLICATION_MODAL
+                    | SWT.ICON_ERROR);
+            box.setText("Error");
+            box.setMessage(baos.toString());
+            box.open();
+
             return;
         }
 
-		}
-  
-
-
-
- 
-
-
+    }
 
     public void open()
     {
@@ -119,7 +97,4 @@ public class DBCodeGenDialog  extends Dialog
         // return result;
     }
 
-
-
 }
-

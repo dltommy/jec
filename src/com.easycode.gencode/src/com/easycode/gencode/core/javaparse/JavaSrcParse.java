@@ -6,6 +6,7 @@
 package com.easycode.gencode.core.javaparse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -200,8 +201,8 @@ public class JavaSrcParse
         newclz.setTemplate(this.templateId);
         String pkg = newclz.getPkg().getPkgName();//null;
 
-        List<String> impPkg = newclz.getImportPkg();//null;
-
+        //List<String> impPkg = newclz.getImportPkg();//null;
+        List<String> impPkg = Arrays.asList(newclz.getParamFrom());//;
         try
         {
             List<AnnoPropModel> newList = CompilationUnitParseUtil
@@ -348,10 +349,9 @@ public class JavaSrcParse
             {
             	for(JavaTypeModel m:referTypeList)
             	{
-
                     String propClzName = this.getTypeClsName(m.getClzName());//;
 
-                    HashMap propMap = getPropIFilePath(pkg, impPkg,
+                    HashMap propMap = getPropIFilePath(m.getPkgName(),pkg, impPkg,
                             propClzName);
                     
                     IFile propFile = (IFile)propMap.get("file");
@@ -395,7 +395,7 @@ public class JavaSrcParse
 							}
 						}
 						relatClz.setPropList(pList);
-						newclz.putReferObj(m.getClzName(), relatClz);
+						newclz.putReferObj(m.getPkgName()+"."+m.getClzName(), relatClz);
                     
                     }
                     
@@ -416,7 +416,7 @@ public class JavaSrcParse
 
     }
 
-    private HashMap getPropIFilePath(String srcPkg, List<String> pkg, 
+    private HashMap getPropIFilePath(String defaultPkgName,String srcPkg, List<String> pkg, 
             String clsName)
     {
         HashMap retMap = new HashMap();
@@ -424,7 +424,26 @@ public class JavaSrcParse
         String proppkg = null;
         IProject javaProject = this.compUnit.getResource()
                 .getProject();
-        String ctx = null;
+         
+        if(defaultPkgName != null && !"".equalsIgnoreCase(defaultPkgName))
+        {
+            ret = javaProject.getFile( pkgSource+"/"+defaultPkgName.replaceAll("\\.", "/") + "/"+clsName+".java");
+            
+            if(ret != null && ret.exists())
+            {
+                
+                retMap.put("file", ret);
+            }
+            else
+            {
+                retMap.put("file", null);
+            }
+            
+
+            retMap.put("pkg", defaultPkgName);
+            return retMap;
+        }
+        
         if (pkg == null || pkg.size() == 0)
         {
             pkg = new ArrayList<String>();

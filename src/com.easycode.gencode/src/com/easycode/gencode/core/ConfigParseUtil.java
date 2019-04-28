@@ -93,8 +93,8 @@ public class ConfigParseUtil
                         {
                             for (String a : props)
                             {
-                                if (method.getMethodName().matches(a)
-                                        || method.getMethodDesc().matches(a))
+                                if (method.getMethodName().matches(a))
+                                        //|| method.getMethodDesc().matches(a))
                                 {
                                     annoMap.put(an.getAnnoName().trim(),
                                             an.getAnno());
