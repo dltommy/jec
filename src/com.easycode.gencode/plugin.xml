@@ -22,9 +22,17 @@
          id="com.easycode.gencode.commands.sampleCommand"
          name="数据库工具">
    </command>  
+ 
+    <command
+         categoryId="com.easycode.gencode.commands.category"
+         id="com.easycode.gencode.commands.config"
+         name="配置">
+   </command>  
+ 
+ 
    <command
          categoryId="com.easycode.gencode.commands.category"
-         id="com.easycode.gencode.handlers.CodeGenHandler"
+         id="com.easycode.gencode.ui.handlers.CodeGenHandler"
          name="Gen Tool">
    </command>  
    
@@ -62,8 +70,8 @@
               label="JEC"
               mnemonic="M">
            <command
-                 commandId="com.easycode.gencode.handlers.CodeGenHandler"
-                 id="com.easycode.gencode.handlers.CodeGenHandler"
+                 commandId="com.easycode.gencode.ui.handlers.CodeGenHandler"
+                 id="com.easycode.gencode.ui.handlers.CodeGenHandler"
                  icon="icons/sample.png"
                  mnemonic="S">
            </command>
@@ -89,9 +97,16 @@
                  icon="icons/sample.png"
                  mnemonic="S">
            </command>
+           
+           <command
+                 commandId="com.easycode.gencode.commands.config"
+                 id="com.easycode.gencode.menus.commands.config"
+                 icon="icons/sample.png"
+                 mnemonic="S">
+           </command>
            <!--
            <command
-                 commandId="com.easycode.gencode.handlers.CodeGenHandler"
+                 commandId="com.easycode.gencode.ui.handlers.CodeGenHandler"
                  id="com.easycode.gencode.menus.sampleCommand2"
                  icon="icons/sample.png"
                  mnemonic="S">
@@ -134,10 +149,26 @@
             icon="icons/sample.png"
           
             contributorClass="com.easycode.configmgr.configeditor.ConfigCodeEditorContributor"
-            class="com.easycode.configmgr.configeditor.ConfigCodeEditor"
-            id="client.editors.gencode.cfg.ConfigEditor">
+            class="com.easycode.configmgr.configeditor.DBGenCodeEditor"
+            id="client.editors.gencode.cfg.DBGenCodeEditor">
       </editor>
    </extension>
+   
+   
+    <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Config Tool"
+            extensions="*.jec"
+            nameFilter="config.jec"
+            icon="icons/sample.png"
+          
+            contributorClass="com.easycode.configmgr.configeditor.ConfigCodeEditorContributor"
+            class="com.easycode.configmgr.configeditor.JECConfigEditor"
+            id="client.editors.gencode.cfg.JECConfigEditor">
+      </editor>
+   </extension>
+   
    
    <extension
          point="org.eclipse.ui.editors">
@@ -146,8 +177,8 @@
             name="多语言词条提取"
             extensions="jsp,htm,html,vue,xml,txt,text"
             icon="icons/sample.png"
-            contributorClass="com.easycode.jspeditor.editor.JSPMultiPageEditorContributor"
-            class="com.easycode.jspeditor.editor.JSPMultiPageEditor"
+            contributorClass="com.easycode.multlangeditor.editor.JSPMultiPageEditorContributor"
+            class="com.easycode.multlangeditor.editor.JSPMultiPageEditor"
             id="client.editors.gencode.jsp.JSPMultiPageEditor">
       </editor>
    </extension>
@@ -210,6 +241,7 @@
        </objectContribution>
    </extension>
    
+   
       <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
@@ -225,10 +257,10 @@
                id="PopMenu.newAction">
        </action>
           
-         
+       
        </objectContribution>
    </extension>
- 
+    
  <!--
   <extension point="org.eclipse.ui.popupMenus">
   
@@ -254,12 +286,17 @@
   <extension
         point="org.eclipse.ui.handlers">
      <handler
-           class="com.easycode.gencode.handlers.DatabaseToolHandler"
+           class="com.easycode.gencode.ui.handlers.DatabaseToolHandler"
            commandId="com.easycode.gencode.commands.sampleCommand">
      </handler>
      <handler
-           class="com.easycode.gencode.handlers.CodeGenHandler"
-           commandId="com.easycode.gencode.handlers.CodeGenHandler">
+           class="com.easycode.gencode.ui.handlers.CodeGenHandler"
+           commandId="com.easycode.gencode.ui.handlers.CodeGenHandler">
+     </handler>
+     
+          <handler
+           class="com.easycode.configmgr.ui.handlers.ConfigHandler"
+           commandId="com.easycode.gencode.commands.config">
      </handler>
      
      

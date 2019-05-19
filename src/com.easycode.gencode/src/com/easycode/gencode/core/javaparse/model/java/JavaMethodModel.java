@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.easycode.common.BaseObject;
 
-public class JavaMethodModel   extends BaseObject
+public class JavaMethodModel   extends CommonType
 {
     private String accessLimit = null;
     private String methodName = null;
@@ -16,10 +15,13 @@ public class JavaMethodModel   extends BaseObject
     private JavaParam[] paramArray = null;
     private String title = null;
 
+
     private List<JavaAn> javaAnList = new ArrayList<JavaAn>();
     private HashMap an = new HashMap();
  
-     
+    private boolean withStatic = false;
+   private boolean withFinal = false;
+    private boolean withAbstract = false;
     // interface,method
     
     private String type = null;
@@ -132,6 +134,38 @@ public class JavaMethodModel   extends BaseObject
 		this.javaAnList = javaAnList;
 	}
 
+
+	public boolean isWithStatic() {
+		return withStatic;
+	}
+
+
+	public void setWithStatic(boolean withStatic) {
+		this.withStatic = withStatic;
+	}
+
+
+	public boolean isWithFinal() {
+		return withFinal;
+	}
+
+
+	public void setWithFinal(boolean withFinal) {
+		this.withFinal = withFinal;
+	}
+
+
+	public boolean isWithAbstract() {
+		return withAbstract;
+	}
+
+
+	public void setWithAbstract(boolean withAbstract) {
+		this.withAbstract = withAbstract;
+	}
+
+ 
+ 
  
     
 }

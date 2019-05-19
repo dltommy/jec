@@ -1,5 +1,6 @@
 package com.easycode.gencode.core.javaparse.model;
 
+import com.easycode.gencode.core.javaparse.model.java.JavaTypeModel;
 import com.easycode.gencode.core.javaparse.model.java.PropModel;
  
 public class AnnoPropModel implements IAnnoModel
@@ -15,6 +16,10 @@ public class AnnoPropModel implements IAnnoModel
     {
         propModel = new PropModel(clsName,popName,isArray);
 
+    }
+    public AnnoPropModel(String propName,JavaTypeModel javaTypeModel)
+    {
+        propModel = new PropModel(propName,javaTypeModel);
     }
     public String getAnno()
     {

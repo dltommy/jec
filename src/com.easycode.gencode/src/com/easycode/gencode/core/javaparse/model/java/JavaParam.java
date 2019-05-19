@@ -14,6 +14,11 @@ public class JavaParam
         this.type = JavaTypeModel.createJavaType(className, isArray);
         
     }
+    public JavaParam(String paramName, JavaTypeModel type)
+    {
+        this.paramName = paramName;
+        this.type = type;
+    }
     public String getParamName()
     {
         return paramName;

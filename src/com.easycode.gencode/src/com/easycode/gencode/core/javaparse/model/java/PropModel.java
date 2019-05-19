@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.easycode.common.BaseObject;
  
 
 /**
@@ -17,7 +16,7 @@ import com.easycode.common.BaseObject;
  * 编   码: dltommy
  * 完成时间: 2011-8-12 下午11:01:46
  */
-public class PropModel extends BaseObject
+public class PropModel extends CommonType
 {
 	public static String REFER_DEFAULT = "auto";
 	 
@@ -36,10 +35,9 @@ public class PropModel extends BaseObject
     private String refer = REFER_DEFAULT;
     //private HashMap<String,Object> userDefine = new HashMap<String,Object>();
     
-    /**html查询元素*/
-    //public HashMap ui =  new HashMap();
-    //public HashMap ds =  new HashMap();
-    //public HashMap da =  new HashMap(); 
+    private boolean withStatic = false;
+    private boolean withFinal = false;
+    private boolean withAbstract = false;
      
     
     public PropModel(String clsName, String popName)
@@ -58,6 +56,13 @@ public class PropModel extends BaseObject
     {
         this.propType = JavaTypeModel.createJavaType(clsName,isArray);
   
+        this.propName = popName;
+        this.colName = PropModel.genColName(propName);
+    }
+    
+    public PropModel(String popName, JavaTypeModel javaTypeModel)
+    {
+        this.propType = javaTypeModel; 
         this.propName = popName;
         this.colName = PropModel.genColName(propName);
     }
@@ -377,6 +382,24 @@ public class PropModel extends BaseObject
 	}
 	public void setJavaAnList(List<JavaAn> javaAnList) {
 		this.javaAnList = javaAnList;
+	}
+	public boolean isWithStatic() {
+		return withStatic;
+	}
+	public void setWithStatic(boolean withStatic) {
+		this.withStatic = withStatic;
+	}
+	public boolean isWithFinal() {
+		return withFinal;
+	}
+	public void setWithFinal(boolean withFinal) {
+		this.withFinal = withFinal;
+	}
+	public boolean isWithAbstract() {
+		return withAbstract;
+	}
+	public void setWithAbstract(boolean withAbstract) {
+		this.withAbstract = withAbstract;
 	}
  
 

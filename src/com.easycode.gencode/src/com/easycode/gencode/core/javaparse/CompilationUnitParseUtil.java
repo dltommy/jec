@@ -4,7 +4,7 @@
  * 描 叙:
  */
 package com.easycode.gencode.core.javaparse;
- 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,6 +41,7 @@ import com.easycode.gencode.core.javaparse.constants.PropAnnoConst;
 import com.easycode.gencode.core.javaparse.model.java.JavaAn;
 import com.easycode.gencode.core.javaparse.model.java.JavaMethodModel;
 import com.easycode.gencode.core.javaparse.model.java.JavaParam;
+import com.easycode.gencode.core.javaparse.model.java.JavaTypeModel;
 import com.easycode.gencode.core.javaparse.model.java.PropModel;
 
 /**
@@ -52,7 +53,6 @@ public class CompilationUnitParseUtil
             ICompilationUnit compUnit, List<DefaultAnno> defaultAnnoList)
             throws Exception
     {
-        // CompilationUnit unit = CompilationUnit
         List<AnnoMethodModel> methdList = new ArrayList<AnnoMethodModel>();
         IJavaElement elemt[] = compUnit.getChildren();
         for (IJavaElement e : elemt)
@@ -74,9 +74,8 @@ public class CompilationUnitParseUtil
                         SourceMethod sm = (SourceMethod) k;
 
                         IAnnotation an[] = sm.getAnnotations();
-                        //List<JavaAn> javaAnList = new ArrayList<JavaAn>();
                         mthd.setJavaAnList(parseAns(an));
- 
+
                         String[] exceptList = null;
                         if (sm.getExceptionTypes() != null)
                         {
@@ -89,6 +88,7 @@ public class CompilationUnitParseUtil
 
                         }
                         mthd.setExceptions(exceptList);
+
                         mthd.setReturnType(UnitUtil.parseTypeDigest(
                                 sm.getReturnType(), null));
 
@@ -108,30 +108,20 @@ public class CompilationUnitParseUtil
                         for (int i = 0; i < p.length; i++)
                         {
 
-                            String ts = p[i].toString();
-                            int pos = ts.indexOf(" ");
                             String type = pType[i];
-                            String typeName = ts.substring(0, pos);// UnitUtil.getByTypeSig(type);
-                            if (typeName == null)
-                            {
-                                throw new Exception("解析参数类型异常！" + pName[i]);
-                            }
-                            if (type.startsWith("["))
-                            {
-                                paramList[i] = new JavaParam(pName[i],
-                                        typeName, true);
+                            // String typeName =
+                            JavaTypeModel typeMode = UnitUtil.parseTypeDigest(
+                                    type, null);
 
-                            }
-                            else
-                            {
-                                paramList[i] = new JavaParam(pName[i],
-                                        typeName, false);
-                            }
+                            paramList[i] = new JavaParam(pName[i], typeMode);
+ 
+                            // 泛型
 
+                            paramList[i].getType().setGeneric(
+                                    parseGen(typeMode.getClzName()));
                             IAnnotation pan[] = p[i].getAnnotations();
-                           
+
                             paramList[i].setJavaAnList(parseAns(pan));
-                             
 
                         }
                         if (paramList != null && paramList.length > 0)
@@ -166,47 +156,7 @@ public class CompilationUnitParseUtil
                                         annoMethod.getCodeRange().getBegin(),
                                         annoMethod.getCodeRange().getEnd())
                                 .trim();
-
-                        methdCtx = methdCtx.replaceAll("//.*\r\n", "");
-                        if (methdCtx.indexOf("{") > -1)
-                        {
-                            methdCtx = methdCtx.substring(0,
-                                    methdCtx.indexOf("{"));
-                        }
-
-                        int methodBegin = methdCtx.lastIndexOf("\r\n");
-                        if (methodBegin > -1)
-                        {
-                            methdCtx = methdCtx.substring(methodBegin).trim();
-
-                        }
-                        if (methdCtx.endsWith(";"))
-                        {
-                            methdCtx = methdCtx.substring(0,
-                                    methdCtx.length() - 1);
-                            mthd.setType("interface");
-                        }
-                        else
-                        {
-                            mthd.setType("method");
-                        }
-
-                        // mthd.setMethodDesc(methdCtx);
-
-                        if (methdCtx.matches("protected[\\s]+[\\s\\S]+"))
-                        {
-                            mthd.setAccessLimit("protected");
-                        }
-                        else if (methdCtx.matches("private[\\s]+[\\s\\S]+"))
-                        {
-                            mthd.setAccessLimit("private");
-                        }
-                        else if (methdCtx.matches("public[\\s]+[\\s\\S]+"))
-                        {
-                            mthd.setAccessLimit("public");
-                        }
-
-                        // mthd.setMethodDesc(mthd.getType()+" "+mthd.getMethodName()+"()")
+                        fillMethod(mthd, methdCtx);
                         Map<String, Object> map = null;
                         if (defaultAnnoList != null)
                         {
@@ -233,8 +183,7 @@ public class CompilationUnitParseUtil
                                                     annoPropMap.put(pan
                                                             .getAnnoName()
                                                             .trim(), pan
-                                                            .getAnnoValue());// pan.getAnno().replaceAll("#propName",
-                                                                             // newProp.getPropName()));
+                                                            .getAnnoValue());
 
                                                 }
                                             }
@@ -340,12 +289,11 @@ public class CompilationUnitParseUtil
 
                         annoMethod.setMethod(mthd);
                         SourceMethod sm = (SourceMethod) k;
+
                         String[] exceptList = null;
 
-                        IAnnotation an[] = sm.getAnnotations(); 
+                        IAnnotation an[] = sm.getAnnotations();
                         mthd.setJavaAnList(parseAns(an));
-
-                        
 
                         if (sm.getExceptionTypes() != null)
                         {
@@ -396,31 +344,20 @@ public class CompilationUnitParseUtil
                         String pType[] = sm.getParameterTypes();
                         for (int i = 0; i < p.length; i++)
                         {
- 
-                            String ts = p[i].toString();
-                            int pos = ts.indexOf(" ");
-                            String type = pType[i];
-                            String typeName = ts.substring(0, pos);// UnitUtil.getByTypeSig(type);
-                            if (typeName == null)
-                            {
-                                throw new Exception("解析参数类型异常！" + pName[i]);
-                            }
-                            if (type.startsWith("["))
-                            {
-                                paramList[i] = new JavaParam(pName[i],
-                                        typeName, true);
 
-                            }
-                            else
-                            {
-                                paramList[i] = new JavaParam(pName[i],
-                                        typeName, false);
-                            }
+                            String type = pType[i]; 
+                            JavaTypeModel typeMode = UnitUtil.parseTypeDigest(
+                                    type, null);
+                            paramList[i] = new JavaParam(pName[i], typeMode);
+ 
+                            // 泛型
+
+                            paramList[i].getType().setGeneric(
+                                    parseGen(typeMode.getClzName()));
 
                             IAnnotation pan[] = p[i].getAnnotations();
-                    
+
                             paramList[i].setJavaAnList(parseAns(pan));
-                          
 
                         }
                         if (paramList != null && paramList.length > 0)
@@ -455,52 +392,39 @@ public class CompilationUnitParseUtil
                                         annoMethod.getCodeRange().getBegin(),
                                         annoMethod.getCodeRange().getEnd())
                                 .trim();
-
-                        methdCtx = methdCtx.replaceAll("//.*\r\n", "");
-                        if (methdCtx.indexOf("{") > -1)
-                        {
-                            methdCtx = methdCtx.substring(0,
-                                    methdCtx.indexOf("{"));
-                        }
-
-                        int methodBegin = methdCtx.lastIndexOf("\r\n");
-                        if (methodBegin > -1)
-                        {
-                            methdCtx = methdCtx.substring(methodBegin).trim();
-
-                        }
-                        if (methdCtx.endsWith(";"))
-                        {
-                            methdCtx = methdCtx.substring(0,
-                                    methdCtx.length() - 1);
-                            mthd.setType("interface");
-                        }
-                        else
-                        {
-                            mthd.setType("method");
-                        }
-
-                        // mthd.setMethodDesc(methdCtx);
-
-                        if (methdCtx.matches("protected[\\s]+[\\s\\S]+"))
-                        {
-                            mthd.setAccessLimit("protected");
-                        }
-                        else if (methdCtx.matches("private[\\s]+[\\s\\S]+"))
-                        {
-                            mthd.setAccessLimit("private");
-                        }
-                        else if (methdCtx.matches("public[\\s]+[\\s\\S]+"))
-                        {
-                            mthd.setAccessLimit("public");
-                        }
-
+                        fillMethod(mthd, methdCtx);
                     }
                 }
             }
 
         }
         return methdList;
+    }
+
+    private static String[] parseGen(String typeName)
+    {
+        List<String> tempList = new ArrayList<String>();
+        if (typeName.indexOf("<") > -1)
+        {
+            String gen = typeName.substring(typeName.indexOf("<") + 1,
+                    typeName.lastIndexOf(">"));
+            typeName = typeName.replace("<", ",");
+            typeName = typeName.replace(">", ",");
+            String ret[] = gen.split(",");
+            for (String t : ret)
+            {
+                if ("".equals(t.trim()) || ",".equals(t.trim()))
+                {
+                    continue;
+                }
+                tempList.add(t);
+            }
+            String[] retArry = new String[tempList.size()];
+            tempList.toArray(retArry);
+            return retArry;
+
+        }
+        return new String[0];
     }
 
     public static AnnoClassModel parseClsPosition(ICompilationUnit compUnit)
@@ -562,27 +486,19 @@ public class CompilationUnitParseUtil
                         SourceField sf = (SourceField) k;
                         AnnoPropModel newProp = null;
                         String type = sf.getTypeSignature();
+ 
+                        JavaTypeModel typeModel = UnitUtil.parseTypeDigest(
+                                type, null);
 
-                        String typeName = UnitUtil.getByTypeSig(type);
-                        if (typeName == null)
-                        {
-                            throw new Exception("解析参数类型异常："
-                                    + sf.getElementName());
-                        }
-                        if (type.startsWith("["))
-                        {
-                            newProp = new AnnoPropModel(typeName,
-                                    sf.getElementName(), true);
-                        }
-                        else
-                        {
-                            newProp = new AnnoPropModel(typeName,
-                                    sf.getElementName(), false);
-                        }
+                        newProp = new AnnoPropModel(sf.getElementName(),
+                                typeModel);
+                      
 
-                        IAnnotation an[] = sf.getAnnotations(); 
+                        newProp.getPropModel().getPropType()
+                                .setGeneric(parseGen(typeModel.getClzName()));
+
+                        IAnnotation an[] = sf.getAnnotations();
                         newProp.getPropModel().setJavaAnList(parseAns(an));
-                        
 
                         String source = sf.getSource();
                         ISourceRange ss = sf.getSourceRange();
@@ -612,21 +528,8 @@ public class CompilationUnitParseUtil
                                     .getOffset() + ss.getLength()));
                         }
 
-                        if (source.matches("protected[\\s].*"))
-                        {
-                            newProp.getPropModel().getPropType()
-                                    .setAccessLimit("protected");
-                        }
-                        else if (source.matches("private[\\s].*"))
-                        {
-                            newProp.getPropModel().getPropType()
-                                    .setAccessLimit("private");
-                        }
-                        else if (source.matches("public[\\s].*"))
-                        {
-                            newProp.getPropModel().getPropType()
-                                    .setAccessLimit("public");
-                        }
+                        fillPropModel(newProp.getPropModel(), source);
+
                         Map<String, Object> map = new HashMap<String, Object>();
                         if (defaultAnnoList != null)
                         {
@@ -657,8 +560,8 @@ public class CompilationUnitParseUtil
                                                     annoPropMap.put(pan
                                                             .getAnnoName()
                                                             .trim(), pan
-                                                            .getAnnoValue());// pan.getAnno().replaceAll("#propName",
-                                                                             // newProp.getPropName()));
+                                                            .getAnnoValue());
+                                                                              
                                                     break;
                                                 }
                                             }
@@ -771,22 +674,20 @@ public class CompilationUnitParseUtil
                         AnnoPropModel newProp = null;
                         String type = sf.getTypeSignature();
 
-                        String typeName = UnitUtil.getByTypeSig(type);
-                        if (type.startsWith("["))
-                        {
-                            newProp = new AnnoPropModel(typeName,
-                                    sf.getElementName(), true);
-                        }
-                        else
-                        {
-                            newProp = new AnnoPropModel(typeName,
-                                    sf.getElementName(), false);
-                        }
+                        JavaTypeModel typeModel = UnitUtil.parseTypeDigest(
+                                type, null);
 
+                        newProp = new AnnoPropModel(sf.getElementName(),
+                                typeModel);
+
+                        newProp.getPropModel()
+                                .getPropType()
+                                .setGeneric(
+                                        parseGen(newProp.getPropModel()
+                                                .getPropType().getClzName()));
                         IAnnotation an[] = sf.getAnnotations();
-                        
+
                         newProp.getPropModel().setJavaAnList(parseAns(an));
-                        
 
                         String source = sf.getSource();
                         ISourceRange ss = sf.getSourceRange();
@@ -815,26 +716,7 @@ public class CompilationUnitParseUtil
                             newProp.setCodeRange(new Range(ss.getOffset(), ss
                                     .getOffset() + ss.getLength()));
                         }
-
-                        if (source != null)
-                        {
-
-                            if (source.matches("protected[\\s].*"))
-                            {
-                                newProp.getPropModel().getPropType()
-                                        .setAccessLimit("protected");
-                            }
-                            else if (source.matches("private[\\s].*"))
-                            {
-                                newProp.getPropModel().getPropType()
-                                        .setAccessLimit("private");
-                            }
-                            else if (source.matches("public[\\s].*"))
-                            {
-                                newProp.getPropModel().getPropType()
-                                        .setAccessLimit("public");
-                            }
-                        }
+                        fillPropModel(newProp.getPropModel(), source);
                         retList.add(newProp);
                     }
 
@@ -847,38 +729,15 @@ public class CompilationUnitParseUtil
 
     private static void setPropValue(PropModel newProp, String key, Object value)
     {
-        /*
-         * if (PropAnnoConst.USER_DEFINE.equals(key)) { if (value != null) {
-         * newProp .setUserDefine((HashMap<String, Object>) value); } } else
-         */
         if (PropAnnoConst.TITLE.equals(key))
         {
             newProp.setTitle((String) value);
         }
-        /*
-         * else if (PropAnnoConst.JSON1.equals(key)) {
-         * 
-         * if (value != null) { if (value instanceof HashMap) { newProp
-         * .setJson1((HashMap<String, Object>) value); }
-         * 
-         * } } else if(PropAnnoConst.JSON2.equals(key)) { if (value != null) {
-         * if (value instanceof HashMap) { newProp .setJson2((HashMap<String,
-         * Object>) value); }
-         * 
-         * } } else if(PropAnnoConst.JSON3.equals(key)) { if (value != null) {
-         * if (value instanceof HashMap) { newProp .setJson3((HashMap<String,
-         * Object>) value); }
-         * 
-         * } }
-         */
         else if (PropAnnoConst.COL_NAME.equals(key))
         {
             newProp.setColName((String) value);
         }
-        /*
-         * else if (PropAnnoConst.REFER_OBJ.equals(key)) {
-         * newProp.setReferObj((String)value); }
-         */
+        
         else if (PropAnnoConst.REFER.equals(key))
         {
             newProp.setRefer((String) value);
@@ -928,9 +787,10 @@ public class CompilationUnitParseUtil
 
         return pkgName;
     }
+
     private static List<JavaAn> parseAns(IAnnotation[] an) throws Exception
     {
-         
+
         List<JavaAn> javaAnList = new ArrayList<JavaAn>();
         if (an != null && an.length > 0)
         {
@@ -945,42 +805,144 @@ public class CompilationUnitParseUtil
                     for (IMemberValuePair r : im)
                     {
                         List<JavaAn> subAnList = new ArrayList<JavaAn>();
-                        if(r.getValue() instanceof Object[])
+                        if (r.getValue() instanceof Object[])
                         {
-                            Object anArry[] = (Object[])r.getValue(); 
-                             for(Object o:anArry)
-                             {
-                                 if(o instanceof Annotation)
-                                 {
-                                     JavaAn subjan = new JavaAn();
-                                     Annotation oan = (Annotation)o;
-                                     subjan.setName(oan.getElementName());
-                                     
-                                     IMemberValuePair paire[] = oan.getMemberValuePairs();
-                                     for (IMemberValuePair rr : paire)
-                                     {
-                                         subjan.getValueMap().put(rr.getMemberName(), rr.getValue());
-                                     }
-                                     subAnList.add(subjan);
-                                 }
-                             }
-                            
-                             jan.getValueMap()
-                                   .put(r.getMemberName(),
-                                           subAnList);
+                            Object anArry[] = (Object[]) r.getValue();
+                            for (Object o : anArry)
+                            {
+                                if (o instanceof Annotation)
+                                {
+                                    JavaAn subjan = new JavaAn();
+                                    Annotation oan = (Annotation) o;
+                                    subjan.setName(oan.getElementName());
+
+                                    IMemberValuePair paire[] = oan
+                                            .getMemberValuePairs();
+                                    for (IMemberValuePair rr : paire)
+                                    {
+                                        subjan.getValueMap().put(
+                                                rr.getMemberName(),
+                                                rr.getValue());
+                                    }
+                                    subAnList.add(subjan);
+                                }
+                            }
+
+                            jan.getValueMap().put(r.getMemberName(), subAnList);
                         }
                         else
                         {
-                             jan.getValueMap()
-                                    .put(r.getMemberName(),
-                                            r.getValue());
+                            jan.getValueMap().put(r.getMemberName(),
+                                    r.getValue());
                         }
- 
-                        
+
                     }
                 }
             }
         }
         return javaAnList;
+    }
+
+    private static void fillMethod(JavaMethodModel mthd, String methdCtx)
+    {
+        if (methdCtx.endsWith(";"))
+        {
+            mthd.setType("interface");
+        }
+        else
+        {
+            mthd.setType("method");
+        }
+        methdCtx = methdCtx.replaceAll("\t", " ");
+        methdCtx = methdCtx.substring(0, methdCtx.indexOf("(")).trim();
+
+        if ((" " + methdCtx).matches("[\\s\\S]+static[\\s<]+[\\s\\S]+"))
+        {
+            mthd.setWithStatic(true);
+        }
+        else
+        {
+            mthd.setWithStatic(false);
+        }
+
+        if ((" " + methdCtx).matches("[\\s\\S]+final[\\s]+[\\s\\S]+"))
+        {
+            mthd.setWithFinal(true);
+        }
+        else
+        {
+            mthd.setWithFinal(false);
+        }
+
+        if ((" " + methdCtx).matches("[\\s\\S]+abstract[\\s]+[\\s\\S]+"))
+        {
+            mthd.setWithAbstract(true);
+        }
+        else
+        {
+            mthd.setWithAbstract(false);
+        }
+
+        if (methdCtx.matches("protected[\\s]+[\\s\\S]+"))
+        {
+            mthd.setAccessLimit("protected");
+        }
+        else if (methdCtx.matches("private[\\s]+[\\s\\S]+"))
+        {
+            mthd.setAccessLimit("private");
+        }
+        else if (methdCtx.matches("public[\\s]+[\\s\\S]+"))
+        {
+            mthd.setAccessLimit("public");
+        }
+
+    }
+ 
+    private static void fillPropModel(PropModel mthd, String propCtx)
+    {
+
+        if (propCtx == null) { return; }
+        propCtx = propCtx.replaceAll("\t", " ");
+
+        if ((" " + propCtx).matches("[\\s\\S]+static[\\s<]+[\\s\\S]+"))
+        {
+            mthd.setWithStatic(true);
+        }
+        else
+        {
+            mthd.setWithStatic(false);
+        }
+
+        if ((" " + propCtx).matches("[\\s\\S]+final[\\s]+[\\s\\S]+"))
+        {
+            mthd.setWithFinal(true);
+        }
+        else
+        {
+            mthd.setWithFinal(false);
+        }
+
+        if ((" " + propCtx).matches("[\\s\\S]+abstract[\\s]+[\\s\\S]+"))
+        {
+            mthd.setWithAbstract(true);
+        }
+        else
+        {
+            mthd.setWithAbstract(false);
+        }
+
+        if (propCtx.matches("protected[\\s]+[\\s\\S]+"))
+        {
+            mthd.getPropType().setAccessLimit("protected");
+        }
+        else if (propCtx.matches("private[\\s]+[\\s\\S]+"))
+        {
+            mthd.getPropType().setAccessLimit("private");
+        }
+        else if (propCtx.matches("public[\\s]+[\\s\\S]+"))
+        {
+            mthd.getPropType().setAccessLimit("public");
+        }
+
     }
 }

@@ -8,14 +8,13 @@ package com.easycode.gencode.core.javaparse.model.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.easycode.common.BaseObject;
 
 /**
  * 功能描叙:
  * 编   码: dltommy
  * 完成时间: 2011-8-12 下午11:01:33
  */
-public class MethodModel extends BaseObject
+public class MethodModel extends CommonType
 {
 	private String accessLimit = null;//"public"; //访问类型修饰,public,private,protected
 

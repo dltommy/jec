@@ -29,7 +29,6 @@ import org.eclipse.jdt.internal.core.SourceType;
  
 
 import com.easycode.common.FileUtil;
-import com.easycode.common.BaseObject;
 import com.easycode.common.JECInfoModel;
 
 /**
@@ -37,7 +36,7 @@ import com.easycode.common.JECInfoModel;
  * 编   码: dltommy
  * 完成时间: 2011-9-18 下午10:23:17
  */
-public class JavaClzModel extends BaseObject
+public class JavaClzModel extends CommonType
 {
  
     //private List<MethodModel> methdList = new ArrayList<MethodModel>();

@@ -7,14 +7,13 @@ package com.easycode.gencode.core.javaparse.model.java;
 
 import java.util.HashMap;
 
-import com.easycode.common.BaseObject;
 
 /**
  * 功能描叙:
  * 编   码: dltommy
  * 完成时间: 2011-8-13 下午09:49:24
  */
-public class JavaTypeModel extends BaseObject implements Cloneable
+public class JavaTypeModel extends CommonType implements Cloneable
 {
     public static Boolean ARRAY = true;
     public static Boolean NOT_ARRAY = false;
@@ -25,6 +24,7 @@ public class JavaTypeModel extends BaseObject implements Cloneable
 
     private String accessLimit = null;
 
+    private String[] generic = null; 
     private Boolean isObject = false;
     private static HashMap<String,JavaTypeModel> BASE_TYPE = new  HashMap<String,JavaTypeModel>();
     
@@ -175,5 +175,13 @@ public class JavaTypeModel extends BaseObject implements Cloneable
         }
         return true;
 	}
+    public String[] getGeneric()
+    {
+        return generic;
+    }
+    public void setGeneric(String[] generic)
+    {
+        this.generic = generic;
+    }
 }
 

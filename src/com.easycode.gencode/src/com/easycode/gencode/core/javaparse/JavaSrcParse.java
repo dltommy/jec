@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map; 
+import java.util.Set;
+import java.util.TreeSet;
 
  
 import org.eclipse.core.resources.IFile; 
@@ -308,6 +310,8 @@ public class JavaSrcParse
             }
             
             ArrayList<JavaTypeModel> referTypeList = new ArrayList<JavaTypeModel>();
+            Set<String> genericSet = new TreeSet<String>();
+            
             if(methodList != null && methodList.size()>0)
             {
             	for(JavaMethodModel m:methodList)
@@ -315,6 +319,13 @@ public class JavaSrcParse
             		JavaTypeModel returnModel = m.getReturnType();
             		if(returnModel != null)
             		{
+            		    if(returnModel.getGeneric() != null && returnModel.getGeneric().length>0)
+            		    {
+            		        for(String t:returnModel.getGeneric())
+            		        {
+            		            genericSet.add(t);
+            		        }
+            		    }
             			if(returnModel.checkIsObject())
             			{
                     		referTypeList.add(returnModel);
@@ -326,7 +337,13 @@ public class JavaSrcParse
             		{
             			for(JavaParam param:params)
             			{
-            				
+                            if(param.getType().getGeneric() != null && param.getType().getGeneric().length>0)
+                            {
+                                for(String t:param.getType().getGeneric())
+                                {
+                                    genericSet.add(t);
+                                }
+                            }
                         	if(param.getType().checkIsObject())
                         	{
                         		referTypeList.add(param.getType());
@@ -336,6 +353,10 @@ public class JavaSrcParse
             		
             	}
             }
+ 
+
+
+            
             
             for (PropModel p : propList)
             {
@@ -343,33 +364,63 @@ public class JavaSrcParse
             	{
             		referTypeList.add(p.getPropType());
             	}
+             
+            	if(p.getPropType().getGeneric() != null && p.getPropType().getGeneric().length>0)
+                {
+                    for(String t:p.getPropType().getGeneric())
+                    {
+                        genericSet.add(t);
+                    }
+                }
             }
             
-            if(referTypeList != null && referTypeList.size()>0)
+            List<HashMap> fileHashMapList = new ArrayList<HashMap>();
+            HashMap<String,String> typePkgMap = new HashMap<String,String>();
+            if(genericSet.size()>0)
             {
-            	for(JavaTypeModel m:referTypeList)
-            	{
-                    String propClzName = this.getTypeClsName(m.getClzName());//;
-
-                    HashMap propMap = getPropIFilePath(m.getPkgName(),pkg, impPkg,
-                            propClzName);
+                Iterator<String> it = genericSet.iterator();
+                while(it.hasNext())
+                {
+                    String v = it.next();
+                    HashMap propMap = getPropIFilePath("",pkg, impPkg,
+                            v);
                     
                     IFile propFile = (IFile)propMap.get("file");
                     if(propFile == null || !propFile.exists())
                     {
                         continue;
                     }
-                    //IProject javaProject = this.compUnit.getResource()
-                    //        .getProject();
+                    fileHashMapList.add(propMap);
+                     
                     
-                    ICompilationUnit newUnit = JavaCore
-                            .createCompilationUnitFrom(propFile);
+                }
+            }
+            
+           
+            
+            if(referTypeList != null && referTypeList.size()>0)
+            {
+                List<String> tempStr = new ArrayList<String>();
+            	for(JavaTypeModel m:referTypeList)
+            	{
+                    String propClzName = this.getTypeClsName(m.getClzName());//;
+
+                    HashMap propMap = getPropIFilePath(m.getPkgName(),pkg, impPkg,
+                            propClzName);
+                     
+
                     
-                    
+                    IFile propFile = (IFile)propMap.get("file");
+                    if(propFile == null || !propFile.exists())
+                    {
+                        continue;
+                    }
+                    fileHashMapList.add(propMap);
+
                     m.setPkgName((String)propMap.get("pkg"));
                     m.setIsObject(true);
                     
-                    List<String> tempStr = new ArrayList<String>();
+                    
                     
                     if(tempStr.contains(propClzName))
                     {
@@ -378,32 +429,60 @@ public class JavaSrcParse
                     else
                     {
                     	tempStr.add(propClzName);
-						JavaClzModel relatClz = JavaClzModel.genInitCls(
-								newUnit, config.getUserName(), pkgSource);// new
-																				// JavaClzModel();
-						relatClz.setClzName(propClzName);
-
-						List<AnnoPropModel> tmpList = CompilationUnitParseUtil
-								.parsePropList(newUnit);
-						List<PropModel> pList = new ArrayList<PropModel>();
-
-						if (tmpList != null) 
-						{
-							for (AnnoPropModel annoPro : tmpList) 
-							{
-								pList.add(annoPro.getPropModel());
-							}
-						}
-						relatClz.setPropList(pList);
-						newclz.putReferObj(m.getPkgName()+"."+m.getClzName(), relatClz);
-                    
+				 
                     }
                     
             	}
 
             }
              
+            for(HashMap propMap:fileHashMapList)
+            {
+                IFile propFile = (IFile)propMap.get("file");
+                if(propFile == null || !propFile.exists())
+                {
+                    continue;
+                }
+                String key = propMap.get("pkg")+"."+(String)propMap.get("clsName");
+                if(newclz.getZzzReferObj() != null && newclz.getZzzReferObj().containsKey(key))
+                {
+                    continue;
+                }
+                
+                ICompilationUnit newUnit = JavaCore
+                        .createCompilationUnitFrom(propFile);
+                
+                JavaClzModel relatClz = JavaClzModel.genInitCls(
+                        newUnit, config.getUserName(), pkgSource);// new
+                                                                        // JavaClzModel();
+                relatClz.setClzName((String)propMap.get("clsName"));
 
+                List<AnnoPropModel> tmpList = CompilationUnitParseUtil
+                        .parsePropList(newUnit);
+                List<PropModel> pList = new ArrayList<PropModel>();
+
+                if (tmpList != null) 
+                {
+                    for (AnnoPropModel annoPro : tmpList) 
+                    {
+                        pList.add(annoPro.getPropModel());
+                    }
+                }
+                relatClz.setPropList(pList);
+                newclz.putReferObj((String)propMap.get("pkg")+"."+(String)propMap.get("clsName"), relatClz);
+                typePkgMap.put((String)propMap.get("clsName"), (String)propMap.get("pkg")+"."+(String)propMap.get("clsName"));
+            }
+
+            
+            fillGeneric(methodList,typePkgMap);
+            
+            List<JavaTypeModel> propGenList = new ArrayList<JavaTypeModel>();
+            for (PropModel p : propList)
+            {
+                fillPropGeneric(p,typePkgMap);
+                
+            } 
+           
             ret = StringUtil.getJsonStr(newclz);
             return StringUtil.formatOutput(ret);
         }
@@ -415,6 +494,96 @@ public class JavaSrcParse
         }
 
     }
+    
+    private void fillPropGeneric(PropModel p, HashMap<String,String> referTypeMap)
+    {
+        if (p.getPropType().getGeneric() != null
+                && p.getPropType().getGeneric().length > 0)
+        {
+
+            // for(int i=0;i<);
+            String[] gens = p.getPropType().getGeneric();
+            String[] newGens = new String[gens.length];
+            for (int i = 0; i < gens.length; i++)
+            {
+                if (referTypeMap.get(gens[i]) == null)
+                {
+                    JavaTypeModel tm = JavaTypeModel.createJavaType(gens[i]);
+                    newGens[i] = tm.getPkgName() + "." + tm.getClzName();
+                }
+                else
+                {
+                    newGens[i] = referTypeMap.get(gens[i]);
+                }
+
+            }
+            p.getPropType().setGeneric(newGens);
+        }
+
+    }
+    private void fillGeneric(List<JavaMethodModel> methodList, HashMap<String,String> referTypeMap)
+    {
+        if(methodList != null && methodList.size()>0)
+        {
+            for(JavaMethodModel m:methodList)
+            {
+                JavaTypeModel returnModel = m.getReturnType();
+                if(returnModel != null)
+                {
+                    if(returnModel.getGeneric() != null && returnModel.getGeneric().length>0)
+                    {
+                       // for(int i=0;i<);
+                       String[] gens=  returnModel.getGeneric();
+                       String[] newGens = new String[gens.length];
+                        for(int i=0;i<gens.length;i++)
+                        {
+                            if(referTypeMap.get(gens[i]) == null)
+                            {
+                                JavaTypeModel tm = JavaTypeModel.createJavaType(gens[i]);
+                                newGens[i] = tm.getPkgName()+"."+tm.getClzName();
+                            }
+                            else
+                            {
+                                newGens[i] = referTypeMap.get(gens[i]);    
+                            }
+                            
+                        }
+                        returnModel.setGeneric(newGens);
+                    }
+
+                }
+                JavaParam[] params= m.getParamArray();
+                if(params != null && params.length>0)
+                {
+                    for(JavaParam param:params)
+                    {
+                        if(param.getType().getGeneric() != null && param.getType().getGeneric().length>0)
+                        {
+                            // for(int i=0;i<);
+                            String[] gens=  param.getType().getGeneric();
+                            String[] newGens = new String[gens.length];
+                             for(int i=0;i<gens.length;i++)
+                             {
+                                 if(referTypeMap.get(gens[i]) == null)
+                                 {
+                                     JavaTypeModel tm = JavaTypeModel.createJavaType(gens[i]);
+                                     newGens[i] = tm.getPkgName()+"."+tm.getClzName();
+                                 }
+                                 else
+                                 {
+                                     newGens[i] = referTypeMap.get(gens[i]);    
+                                 }
+                                 
+                             }
+                             param.getType().setGeneric(newGens);
+                        }
+ 
+                    }
+                }
+                
+            }
+        }
+    }
 
     private HashMap getPropIFilePath(String defaultPkgName,String srcPkg, List<String> pkg, 
             String clsName)
@@ -424,7 +593,7 @@ public class JavaSrcParse
         String proppkg = null;
         IProject javaProject = this.compUnit.getResource()
                 .getProject();
-         
+        retMap.put("clsName", clsName);
         if(defaultPkgName != null && !"".equalsIgnoreCase(defaultPkgName))
         {
             ret = javaProject.getFile( pkgSource+"/"+defaultPkgName.replaceAll("\\.", "/") + "/"+clsName+".java");
@@ -441,6 +610,7 @@ public class JavaSrcParse
             
 
             retMap.put("pkg", defaultPkgName);
+
             return retMap;
         }
         
