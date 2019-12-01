@@ -96,6 +96,11 @@ public class StringUtil
 
     public static String formatOutput(String ctx)
     {
+        return formatOutput(ctx,"\n");
+    }
+
+    public static String formatOutput(String ctx,String formatPatt)
+    {
         String blank = "        ";
         if(ctx == null)
         {
@@ -127,7 +132,7 @@ public class StringUtil
             }
             if (leftList.contains(cur) && doubleQuotationCount % 2 == 0)
             {
-                retBuf.append("\n");
+                retBuf.append(formatPatt);
 
                 for (int k = 0; k < stack.size(); k++)
                 {
@@ -137,7 +142,7 @@ public class StringUtil
             }
             else if (rightList.contains(cur) && doubleQuotationCount % 2 == 0)
             {
-                retBuf.append("\n");
+                retBuf.append(formatPatt);
                 for (int k = 0; k < stack.size() - 1; k++)
                 {
                     retBuf.append(blank);
@@ -150,7 +155,7 @@ public class StringUtil
             {
                 //先打逗号，再换行
                 retBuf.append(cur);
-                retBuf.append("\n");
+                retBuf.append(formatPatt);
                 
                 for (int k = 0; k < stack.size(); k++)
                 {
@@ -163,7 +168,7 @@ public class StringUtil
                 {
                     if (curStackPos.pos == i - 1)
                     {
-                        retBuf.append("\n");
+                        retBuf.append(formatPatt);
                         for (int k = 0; k < stack.size(); k++)
                         {
                             retBuf.append(blank);
@@ -184,7 +189,109 @@ public class StringUtil
         } 
         return retBuf.toString();
     }
-    
+
+    public static String formatOutput(String ctx,int padLeftCount,int blankCount,String formatPatt)
+    {
+        String blank = "";
+        for(int i=0;i<blankCount; i++)
+        {
+            blank +=" ";
+        }
+        String padLef = "";
+        for(int i=0;i<padLeftCount;i++){
+            padLef +=" ";
+        }
+        
+        //String blank = "        ";
+        if(ctx == null)
+        {
+            return null;
+        }
+        //双引号个数
+        int doubleQuotationCount = 0;
+        StringBuffer retBuf = new StringBuffer(padLef);
+        List<String> leftList = new ArrayList<String>();
+        leftList.add("{");
+        leftList.add("[");
+        //leftList.add("[");
+        List<String> rightList = new ArrayList<String>();
+        rightList.add("}");
+        rightList.add("]");
+        
+        List<String> wrapList = new ArrayList<String>();
+        wrapList.add(",");
+        
+        Stack<PosObj> stack = new Stack<PosObj>();
+        PosObj curStackPos = null;
+        //Stack<String> stack = new Stack<String>();
+        for(int i = 0;i<ctx.length();i++)
+        {
+            String cur = ctx.substring(i, i + 1);
+            if("\"".equals(cur))
+            {
+                doubleQuotationCount ++;
+            }
+            if (leftList.contains(cur) && doubleQuotationCount % 2 == 0)
+            {
+                retBuf.append(formatPatt);
+
+                for (int k = 0; k < stack.size(); k++)
+                {
+                    retBuf.append(blank);
+                }
+                curStackPos = stack.push(new PosObj(i, cur));
+            }
+            else if (rightList.contains(cur) && doubleQuotationCount % 2 == 0)
+            {
+                retBuf.append(formatPatt);
+                for (int k = 0; k < stack.size() - 1; k++)
+                {
+                    retBuf.append(blank);
+                }
+                curStackPos = stack.pop();
+                curStackPos.pos = i;
+            }
+            //在引号里面的分行字符，不换行
+            if(wrapList.contains(cur) && doubleQuotationCount % 2 == 0)
+            {
+                //先打逗号，再换行
+                retBuf.append(cur);
+                retBuf.append(formatPatt);
+                
+                for (int k = 0; k < stack.size(); k++)
+                {
+                    retBuf.append(blank);
+                }
+            }
+            else
+            {
+                if (curStackPos != null)
+                {
+                    if (curStackPos.pos == i - 1)
+                    {
+                        retBuf.append(formatPatt);
+                        for (int k = 0; k < stack.size(); k++)
+                        {
+                            retBuf.append(blank);
+                        }
+                        retBuf.append(cur);
+                    }
+                    else
+                    {
+                        retBuf.append(cur);
+                    }
+                }
+                else
+                {
+                    retBuf.append(cur);
+                }
+            }
+
+        } 
+        String ret = retBuf.toString();
+        ret = ret.replace(formatPatt, formatPatt+padLef);
+        return ret;
+    }
     public static Map josnToMap(String jsonObjStr) throws Exception
     {
         if(jsonObjStr == null || "".equals(jsonObjStr))

@@ -88,7 +88,7 @@ public class DbMgr extends ConnectionBase
             meta = connection.getMetaData();
 
             rsTable = meta.getTables(null, user.toUpperCase(),
-                    tableName.toUpperCase(), new String[]
+                    tableName, new String[]
                     { "TABLE", "VIEW" });
             // 获取到的数据是以ResultSet形式返回
             while (rsTable.next())
@@ -97,7 +97,7 @@ public class DbMgr extends ConnectionBase
                 // System.out.println(rsTable.getString(3)); //
                 // 第二列是用户名称(有的表可能没有对应的用户)
 
-                String targetName = rsTable.getString(3).toUpperCase();
+                //String targetName = rsTable.getString(3).toUpperCase();
                 if (tableName != null && !"".equals(tableName.trim()))
                 {
                     // if(targetName.startsWith(tableName.toUpperCase()))
@@ -262,7 +262,7 @@ public class DbMgr extends ConnectionBase
                 {
 
                     ResultSet rs = dbmd.getColumns(null, dbmd.getUserName(),
-                            tableName.toUpperCase(), "%");
+                            tableName, "%");
 
                     while (rs.next())
                     {

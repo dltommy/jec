@@ -26,6 +26,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import com.easycode.common.StringUtil;
 import com.easycode.gencode.core.ftlmethod.FiltMatch;
 import com.easycode.gencode.core.ftlmethod.FiltNotMatch;
+import com.easycode.gencode.core.ftlmethod.NewInstanceStr;
  
 import com.easycode.gencode.core.ftlmethod.QueryByPath;
 import com.easycode.gencode.ui.elements.CodeTreeCheckBox;
@@ -416,7 +417,7 @@ public class FileGen
 		root.put("filtMatch", new FiltMatch());
 		root.put("filtNotMatch", new FiltNotMatch());
 		root.put("queryByPath", new QueryByPath());
- 
+	    root.put("newInstanceStr", new NewInstanceStr(root));
 		StringWriter sw = new StringWriter();
  
 		Template temp = conf.getTemplate("t1");
@@ -501,7 +502,7 @@ public class FileGen
 		root.put("filtMatch", new FiltMatch());
 		root.put("filtNotMatch", new FiltNotMatch());
 		root.put("queryByPath", new QueryByPath());
- 
+	    root.put("newInstanceStr", new NewInstanceStr(root));
 		StringWriter sw = new StringWriter();
 		try
 		{

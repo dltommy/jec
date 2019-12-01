@@ -175,7 +175,7 @@
       <editor
             default="false"
             name="多语言词条提取"
-            extensions="jsp,htm,html,vue,xml,txt,text"
+            extensions="jsp,htm,html,xml,txt,text"
             icon="icons/sample.png"
             contributorClass="com.easycode.multlangeditor.editor.JSPMultiPageEditorContributor"
             class="com.easycode.multlangeditor.editor.JSPMultiPageEditor"

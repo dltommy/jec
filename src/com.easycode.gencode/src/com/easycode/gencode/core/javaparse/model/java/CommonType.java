@@ -28,35 +28,5 @@ public class CommonType implements Serializable
     {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-/*
-    public boolean isWithStatic()
-    {
-        return withStatic;
-    }
-
-    public void setWithStatic(boolean withStatic)
-    {
-        this.withStatic = withStatic;
-    }
-
-    public boolean isWithFinal()
-    {
-        return withFinal;
-    }
-
-    public void setWithFinal(boolean withFinal)
-    {
-        this.withFinal = withFinal;
-    }
-
-    public boolean isWithAbstract()
-    {
-        return withAbstract;
-    }
-
-    public void setWithAbstract(boolean withAbstract)
-    {
-        this.withAbstract = withAbstract;
-    }
-  */
+ 
 }

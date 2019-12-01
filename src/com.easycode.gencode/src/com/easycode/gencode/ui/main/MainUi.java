@@ -341,10 +341,12 @@ public class MainUi implements MouseListener
             queryModelPos.setItems(new String[]
             { "本地", "服务器" });
             queryModelPos.select(0);
-
+            //queryModelPos.set
+            
             button = new Button(leftTopCom, SWT.NONE);
             button.setText("查询");// 所有
-            GridData butlayoudata = new GridData(GridData.HORIZONTAL_ALIGN_END);
+             //GridData butlayoudata = new GridData(GridData.HORIZONTAL_ALIGN_END);
+            GridData butlayoudata = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
             button.setLayoutData(butlayoudata);
 
             button.addMouseListener(this);

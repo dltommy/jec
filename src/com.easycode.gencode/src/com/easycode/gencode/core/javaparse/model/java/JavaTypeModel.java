@@ -20,6 +20,7 @@ public class JavaTypeModel extends CommonType implements Cloneable
 	
 	private boolean isArray;
     private String clzName;
+    private String typeName;
     private String pkgName;
 
     private String accessLimit = null;
@@ -56,6 +57,7 @@ public class JavaTypeModel extends CommonType implements Cloneable
     	BASE_TYPE.put("List", new JavaTypeModel("java.util.List"));
     	
     	BASE_TYPE.put("Date", new JavaTypeModel("java.util.Date"));
+        BASE_TYPE.put("HashMap", new JavaTypeModel("java.util.HashMap"));
     }
     private JavaTypeModel(String fullClzName)
     {
@@ -70,7 +72,10 @@ public class JavaTypeModel extends CommonType implements Cloneable
     	{
     		this.isArray = true;
     	}
-    	//this.isArray = isArray;
+     
+    	this.typeName = getTypeClsName(this.clzName);
+    	
+    	
     	int pos = fullClzName.lastIndexOf(".");
     	if(pos == -1)
     	{
@@ -182,6 +187,38 @@ public class JavaTypeModel extends CommonType implements Cloneable
     public void setGeneric(String[] generic)
     {
         this.generic = generic;
+    }
+    public String getTypeName()
+    {
+        return typeName;
+    }
+    public void setTypeName(String typeName)
+    {
+        this.typeName = typeName;
+    }
+ 
+  public static String getTypeClsName(String propClzName){
+        
+        // 泛型
+        if (propClzName.indexOf("<") > -1)
+        { 
+           return propClzName.substring(0,propClzName.indexOf("<"));
+        }
+        if (propClzName.indexOf("[") > -1)
+        {
+            String referClz = propClzName.substring(0,
+                    propClzName.length() - 2);
+            propClzName = referClz;
+        } 
+        
+        if (propClzName.indexOf("[") > -1)
+        {
+            String referClz = propClzName.substring(0,
+                    propClzName.length() - 2);
+            propClzName = referClz;
+        } 
+        return propClzName;
+    
     }
 }
 

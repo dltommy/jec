@@ -1,6 +1,7 @@
 package com.easycode.gencode.core.dbtool;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.json.JSONObject;
@@ -16,8 +17,13 @@ public class TableModel implements Cloneable
     //private String templateId;
     private List<ColumnModel> colList = null;//new ArrayList<ColumnModel>();
     private String remark;
+    private Long genTime;
     public JECInfoModel jec = new JECInfoModel();
     private JSONObject an = new JSONObject();
+    public TableModel()
+    {
+       this.genTime = System.currentTimeMillis();
+    }
     public DB getDb()
     {
         return db;
@@ -105,4 +111,13 @@ public class TableModel implements Cloneable
     {
         return super.clone();
     }
+    public Long getGenTime()
+    {
+        return genTime;
+    }
+    public void setGenTime(Long genTime)
+    {
+        this.genTime = genTime;
+    }
+
 }

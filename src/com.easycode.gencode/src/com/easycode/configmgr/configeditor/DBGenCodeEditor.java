@@ -247,8 +247,15 @@ public class DBGenCodeEditor extends MultiPageEditorPart implements
         GridData boData = new GridData(GridData.BEGINNING);
         boData.horizontalSpan = 1;
         driverComb.setLayoutData(boData);
-        driverComb.setItems(new String[]
-        { "", "com.mysql.jdbc.Driver", "oracle.jdbc.driver.OracleDriver" });
+        String drives = MultLang.getMultLang("res.drivers");
+        if(drives != null){
+            driverComb.setItems(drives.split(","));
+        }
+        else{
+            driverComb.setItems(new String[]
+                    { "", "com.mysql.jdbc.Driver", "oracle.jdbc.driver.OracleDriver" });
+        }
+
         driverComb.select(0);
 
         userConfig = new FormTitleInput(toolkit, topCom, "User: *", "", SWT.NO);

@@ -403,7 +403,7 @@ public class JavaSrcParse
                 List<String> tempStr = new ArrayList<String>();
             	for(JavaTypeModel m:referTypeList)
             	{
-                    String propClzName = this.getTypeClsName(m.getClzName());//;
+                    String propClzName = JavaTypeModel.getTypeClsName(m.getClzName());//;
 
                     HashMap propMap = getPropIFilePath(m.getPkgName(),pkg, impPkg,
                             propClzName);
@@ -829,16 +829,18 @@ public class JavaSrcParse
             clz.addExtendProp(key, value);
         }
     }
+  
+    /*
     private String getTypeClsName(String propClzName)
     { 
-        // 泛型
+         
         if (propClzName.indexOf("<") > -1)
         {
             String referClz = propClzName.substring(
                     propClzName.indexOf("<") + 1,
                     propClzName.indexOf(">"));
 
-            propClzName = referClz;// clzName.substring(0,clzName.indexOf("<"));
+            propClzName = referClz; 
         }
         if (propClzName.indexOf("[") > -1)
         {
@@ -855,5 +857,6 @@ public class JavaSrcParse
         } 
         return propClzName;
     }
+    */
 
 }
