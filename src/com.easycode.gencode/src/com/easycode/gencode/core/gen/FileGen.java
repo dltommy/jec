@@ -26,7 +26,10 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import com.easycode.common.StringUtil;
 import com.easycode.gencode.core.ftlmethod.FiltMatch;
 import com.easycode.gencode.core.ftlmethod.FiltNotMatch;
+import com.easycode.gencode.core.ftlmethod.NewInstance;
 import com.easycode.gencode.core.ftlmethod.NewInstanceStr;
+import com.easycode.gencode.core.ftlmethod.SetValue;
+import com.easycode.gencode.core.ftlmethod.ToJsonStr;
  
 import com.easycode.gencode.core.ftlmethod.QueryByPath;
 import com.easycode.gencode.ui.elements.CodeTreeCheckBox;
@@ -418,6 +421,9 @@ public class FileGen
 		root.put("filtNotMatch", new FiltNotMatch());
 		root.put("queryByPath", new QueryByPath());
 	    root.put("newInstanceStr", new NewInstanceStr(root));
+	    root.put("newInstance", new NewInstance(root));
+	    root.put("setValue", new SetValue());
+	    root.put("toJsonStr", new ToJsonStr());
 		StringWriter sw = new StringWriter();
  
 		Template temp = conf.getTemplate("t1");
@@ -503,6 +509,10 @@ public class FileGen
 		root.put("filtNotMatch", new FiltNotMatch());
 		root.put("queryByPath", new QueryByPath());
 	    root.put("newInstanceStr", new NewInstanceStr(root));
+	    root.put("newInstance", new NewInstance(root));
+	    root.put("setValue", new SetValue());
+	    root.put("toJsonStr", new ToJsonStr());
+	    
 		StringWriter sw = new StringWriter();
 		try
 		{

@@ -49,18 +49,50 @@ public class NewInstanceStr implements TemplateMethodModelEx
         }
         else
         {
+            SimpleScalar targetScalar = (SimpleScalar) args.get(0);
+            List<Map> propList = null;//(List<Map>) sys.get("propList");
+            
+            if(targetScalar == null){
+                propList =  (List<Map>) sys.get("propList");
+            }
+            else{
+                String target = targetScalar.getAsString();
+                Map targetMap = (Map)ref.get(target);
+                
+                propList =  (List<Map>) targetMap.get("propList");
+            }
+            
+            Object setValue = args.get(1);
+            JSONObject setJsonObj = null;
+            if(setValue instanceof SimpleHash){
+                setJsonObj = new JSONObject();
+                SimpleHash hashValues = (SimpleHash) args.get(1);
+                 TemplateModelIterator  it= hashValues.keys().iterator();
+                 while(it.hasNext()){
+                     TemplateModel m = it.next();
+ 
+                     setJsonObj.put(m.toString(), hashValues.get(m.toString()));
+                 }
+                 
+            }
+            else{
+                SimpleScalar values = (SimpleScalar) args.get(1); 
+                setJsonObj = JSONObject.fromObject(values.getAsString());
+            }
+            
+            
             String format = null;
             List<String> excludeList = new ArrayList<String>();
-            if(args.size()>=2){
-                SimpleScalar exclude = (SimpleScalar) args.get(1);
+            if(args.size()>=3){
+                SimpleScalar exclude = (SimpleScalar) args.get(2);
                 String[] excArray = exclude.getAsString().split(",");
                 for(String t:excArray){
                     excludeList.add(t);
                 }
                 
             }
-            if(args.size()==3){
-                SimpleScalar formatScalar = (SimpleScalar) args.get(2);
+            if(args.size()==4){
+                SimpleScalar formatScalar = (SimpleScalar) args.get(3);
                 format = formatScalar.getAsString();
                 JSONObject paramFormat = JSONObject.fromObject(format);
                 if(paramFormat.get("left") != null){
@@ -74,26 +106,11 @@ public class NewInstanceStr implements TemplateMethodModelEx
                 }
             }
             HashMap<String, Object> map = new HashMap<String, Object>();
-            Object t = args.get(0);
-            JSONObject obj = null;
-            if(t instanceof SimpleHash){
-                obj = new JSONObject();
-                SimpleHash hashValues = (SimpleHash) args.get(0);
-                 TemplateModelIterator  it= hashValues.keys().iterator();
-                 while(it.hasNext()){
-                     TemplateModel m = it.next();
- 
-                     obj.put(m.toString(), hashValues.get(m.toString()));
-                 }
-                 
-            }
-            else{
-                SimpleScalar values = (SimpleScalar) args.get(0); 
-                  obj = JSONObject.fromObject(values.getAsString());
-            }
+            
+            
 
 
-            List<Map> propList = (List<Map>) sys.get("propList");
+
 
             for (Map propMap : propList)
             {
@@ -119,7 +136,7 @@ public class NewInstanceStr implements TemplateMethodModelEx
                         if(excludeList.contains(subPropName)){
                             continue;
                         }
-                        Object o = obj.get(pName);
+                        Object o = setJsonObj.get(pName);
                         
                         if(o instanceof Map){
                             Map subMapValue = (Map)o;
@@ -128,14 +145,14 @@ public class NewInstanceStr implements TemplateMethodModelEx
                         }
                         else{
                             subHashMap.put(subPropName,
-                                    obj.get(pName + "." + subPropName));
+                                    setJsonObj.get(pName + "." + subPropName));
                         }
 
                     }
                 }
                 else
                 {
-                    map.put(pName, obj.get(pName));
+                    map.put(pName, setJsonObj.get(pName));
                 }
             }
             String formatOutput = null;
