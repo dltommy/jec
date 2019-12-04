@@ -28,6 +28,7 @@ import com.easycode.gencode.core.ftlmethod.FiltMatch;
 import com.easycode.gencode.core.ftlmethod.FiltNotMatch;
 import com.easycode.gencode.core.ftlmethod.NewInstance;
 import com.easycode.gencode.core.ftlmethod.NewInstanceStr;
+import com.easycode.gencode.core.ftlmethod.NewObject;
 import com.easycode.gencode.core.ftlmethod.SetValue;
 import com.easycode.gencode.core.ftlmethod.ToJsonStr;
  
@@ -424,6 +425,7 @@ public class FileGen
 	    root.put("newInstance", new NewInstance(root));
 	    root.put("setValue", new SetValue());
 	    root.put("toJsonStr", new ToJsonStr());
+	    root.put("newObject", new NewObject());
 		StringWriter sw = new StringWriter();
  
 		Template temp = conf.getTemplate("t1");
@@ -512,6 +514,7 @@ public class FileGen
 	    root.put("newInstance", new NewInstance(root));
 	    root.put("setValue", new SetValue());
 	    root.put("toJsonStr", new ToJsonStr());
+	    root.put("newObject", new NewObject());
 	    
 		StringWriter sw = new StringWriter();
 		try

@@ -10,6 +10,7 @@ import com.easycode.common.StringUtil;
 
 import net.sf.json.JSONObject;
 
+import freemarker.core.Environment;
 import freemarker.template.SimpleNumber;
 import freemarker.template.SimpleScalar;
 import freemarker.template.SimpleSequence;
